@@ -1,0 +1,146 @@
+@import "type-default"
+@import "variables"
+@import "functions"
+body
+  margin: 0px
+  padding: 0px
+  font-family: $font-primary
+  background-color: map-get($bg-color, 'primary')
+  overflow-x: hidden
+
+.ul-right-side-menu
+  padding: 0px
+  margin: 0px
+
+.div-message-box
+  @include color-light($bg-color, 'gray', 30%)
+  margin: 2%
+  padding: 15px
+  @include set-border(0px, 20px)
+
+.div-message-box-descr
+  padding: 5px
+  @include set-border(0px, 20px)
+  position: absolute
+  left: 2%
+
+.message-name
+  color: map-get($font-color, 'dark')
+  font:
+    size: map-get($font-message, 'name-size')
+    weight: map-get($font-message, 'name-weight')
+    style: map-get($font-message, 'name-style')
+
+.message-text
+  color: map-get($font-color, 'primary')
+  font:
+    size: map-get($font-message, 'text-size')
+    weight: map-get($font-message, 'text-weight')
+
+.div-inline-block
+  display: inline-block
+  width: 15%
+
+textarea:focus
+  outline: none
+
+textarea
+  resize: none
+  overflow: auto
+
+.icon-size
+  font-size: 22px
+
+.icon-size-xs
+  font-size: 15px
+
+.icon-color
+  color: map-get($bg-color, 'darker')
+
+.icon-color-menu
+  color: map-get($font-color, 'primary')
+  margin-left: 15px
+
+.txt-header
+  color: map-get($font-header, 'color')
+  font:
+    size: map-get($font-header, 'size')
+    weight: map-get($font-header, 'weight')
+
+.txt-header-green
+  color: map-get($bg-color, 'lighter')
+  font:
+    size: map-get($font-header, 'size')
+    weight: map-get($font-header, 'weight')
+
+.txt-header-dark-green
+  color: map-get($bg-color, 'darker')
+  font:
+    size: map-get($font-header, 'size')
+    weight: map-get($font-header, 'weight')
+
+.txt-header-gray
+  color: map-get($bg-color, 'gray')
+  font:
+    size: map-get($font-header, 'size')
+    weight: map-get($font-header, 'weight')
+
+.txt-main-gray
+  color: map-get($bg-color, 'gray')
+  font:
+    size: 16px
+    weight: 200
+
+.txt-sm-gray
+  color: map-get($bg-color, 'gray')
+  font:
+    size: 12px
+    weight: 100
+
+.txt-primary
+  font-family: $font-primary
+
+.txt-buttons
+  font:
+    size: map-get($font-btn, 'size')
+    weight: map-get($font-btn, 'weight')
+
+.txt-link
+  font-size: 15px
+  color: map-get($font-link, 'color')
+  text-decoration: map-get($font-link, 'decoration')
+  &:hover
+    color: map-get($font-link, 'h-color')
+    text-decoration: map-get($font-link, 'h-decoration')
+    text-decoration-color: map-get($font-link, 'h-line-color')
+  &:visited
+    color: map-get($font-link, 'v-color')
+    text-decoration: map-get($font-link, 'v-decoration')
+
+.txt-description
+  color: map-get($font-description, 'color')
+  font:
+    size: map-get($font-description, 'size')
+    style: map-get($font-description, 'style')
+    weight: map-get($font-description, 'weight')
+
+.txt-description-invert
+  color: white
+  font:
+    size: map-get($font-description, 'size')
+    style: map-get($font-description, 'style')
+    weight: map-get($font-description, 'weight')
+
+.txt-invert
+  color: map_get($font-invert, 'color')
+
+.test-block
+  background-color: map-get($bg-color, 'primary')
+  @include set-border(2px, 10px)
+  padding: 10px
+  margin: 2%
+
+.welcome-img
+  display: flex
+  align-items: center
+  justify-content: center

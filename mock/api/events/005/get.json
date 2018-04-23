@@ -1,0 +1,68 @@
+{
+  "event": {
+    "id": "005",
+    "name": "Let me make you drunk#3",
+    "status": false,
+    "date": [
+      {
+        "drafts": [
+          {
+            "date": "01.04.2018",
+            "votes": 0
+          },
+          {
+            "date": "05.04.2018",
+            "votes": 0
+          }
+        ],
+        "confirmed": ""
+      }
+    ],
+    "place": [
+      {
+        "drafts": [
+          {
+            "place": "Address 01",
+            "votes": 2
+          },
+          {
+            "place": "Address 02",
+            "votes": 1
+          },
+          {
+            "place": "Address 03",
+            "votes": 4
+          }
+        ],
+        "confirmed": ""
+      }
+    ],
+    "members": [
+      {
+        "invited": [
+          {
+            "id": "001",
+            "name": "Jane Doe",
+            "role": "user",
+            "chat_success": false
+          },
+          {
+            "id": "003",
+            "name": "Samira Doe 3",
+            "role": "user",
+            "chat_success": false
+          }
+        ],
+        "confirmed": [
+          {
+            "id": "005",
+            "name": "Neimar",
+            "role": "admin",
+            "chat_success": true
+          }
+        ]
+      }
+    ],
+    "additional": ""
+  }
+}

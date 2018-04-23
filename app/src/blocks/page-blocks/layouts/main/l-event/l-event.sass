@@ -1,0 +1,188 @@
+@import "../../../../../sass/variables"
+@import "../../../../../sass/type-default"
+@import "../../../../../sass/functions"
+
+.event-menu__list
+  list-style-type: none
+  font-weight: 700
+
+
+.event-menu__item
+  display: flex
+  align-items: center
+  justify-content: flex-start
+  height: 70px
+  padding-left: 45px
+  cursor: pointer
+  transition: background-color .4s
+  &:hover, &.active
+    font-size: 18px
+
+.event-menu__title
+  margin-top: 40px
+  position: relative
+
+.event-menu__close
+  position: absolute
+  height: 20px
+  width: 20px
+  right: -30px
+  top: 0
+  cursor: pointer
+  &:after
+    content: " "
+    height: 15px
+    width: 3px
+    position: absolute
+    top: 0
+    left: 50%
+    transform: rotate(45deg)
+  &:before
+    content: " "
+    height: 15px
+    width: 3px
+    top: 0
+    left: 50%
+    position: absolute
+    transform: rotate(-45deg)
+
+.event-date-vote
+  margin-left: 10px
+  margin-right: 10px
+  font:
+    size: map-get($font-btn, 'size')
+    weight: map-get($font-btn, 'weight')
+  color: map-get($font-color, 'primary')
+  &:hover
+    color: map_get($font-color, 'orange')
+    cursor: pointer
+
+.event-content
+  height: calc(100% - (#{$footer-height}))
+  overflow: auto
+  padding-left: 16px
+  padding-right: 16px
+
+.event-name-list
+  color: map-get($font-color, 'gray')
+  padding-right: 5px
+  font:
+    size: map-get($font-message, 'name-size')
+    weight: map-get($font-message, 'name-weight')
+    style: map-get($font-message, 'name-style')
+
+.create-event-div-box
+  display: flex
+  flex-direction: row
+  align-items: center
+  padding-bottom: 10px
+  margin-top: 16px
+
+.create-event-spacer
+  height: 1px
+  width: 100%
+  background-color: map-get($font-color, 'gray')
+
+.checkbox-div
+  position: absolute
+  left: 150px
+  color: black
+  border-radius: 10px
+  flex-direction: row
+  justify-content: space-around
+  margin: 5px
+  padding: 20px
+  transition: .5s
+  max-height: 400px
+  min-width: 300px
+  overflow: auto
+
+.checkDate-div
+  position: fixed
+  color: black
+  border-radius: 10px
+  flex-direction: row
+  justify-content: space-around
+  margin: 5px
+  padding: 10px
+  transition: .5s
+  overflow: auto
+
+.checkbox-ul
+  margin: 0px
+  padding: 5px
+
+.checkbox-div-list
+  list-style-type: none
+  margin: 5px
+  padding: 3px
+  font:
+    size: 16px
+    weight: 300
+    style: map-get($font-message, 'name-style')
+  &:hover
+    cursor: pointer
+
+.check-dates-list
+  list-style-type: none
+  margin: 5px
+  padding: 3px
+  font:
+    size: 14px
+    weight: 300
+  &:hover
+    cursor: pointer
+    color: map-get($font-color, 'orange')
+
+.checkbox-btn-block
+  margin-top: 20px
+
+.search
+  margin: 0
+
+.names
+  font:
+    size: 25px
+    weight: 300
+
+
+.popup-message
+  display: none
+  position: fixed
+  z-index: 1
+  left: 0
+  top: 0
+  width: 100%
+  height: 100%
+  overflow: auto
+  background-color: rgb(0,0,0)
+  background-color: rgba(0,0,0,0.4)
+
+.popup-message-content
+  @include color-light($bg-color, 'green', 50%)
+  border: 1px solid rgb(203, 207, 162)
+  border-radius:  20px
+  margin: 15% auto
+  padding: 20px
+  width: 40%
+
+.btn-close
+  color: #aaa
+  float: right
+  margin: 10px
+  font-size: 28px
+  font-weight: bold
+  &:hover
+    color: black
+    text-decoration: none
+    cursor: pointer
+
+.select-date-type
+  border: 1px solid map-get($font-color, 'gray')
+  border-radius:  20px
+  min-height: 25px
+  margin: 5px
+  color: map-get($font-color, 'gray')
+  &:hover
+    background-color: map-get($font-color, 'gray')
+    color: black

@@ -1,0 +1,78 @@
+{
+  "event": {
+    "id": "003",
+    "name": "Just meeting",
+    "status": true,
+    "date": [
+      {
+        "drafts": [
+          {
+            "date": "01.02.2018",
+            "votes": 2
+          },
+          {
+            "date": "03.02.2018",
+            "votes": 1
+          },
+          {
+            "date": "05.02.2018",
+            "votes": 0
+          }
+        ],
+        "confirmed": "02.06.2018"
+      }
+    ],
+    "place": [
+      {
+        "drafts": [
+          {
+            "place": "Address 01",
+            "votes": 2
+          },
+          {
+            "place": "Address 02",
+            "votes": 1
+          },
+          {
+            "place": "Address 03",
+            "votes": 0
+          }
+        ],
+        "confirmed": "Address 01"
+      }
+    ],
+    "members": [
+      {
+        "invited": [
+          {
+            "id": "001",
+            "name": "Jane Doe",
+            "role": "user",
+            "chat_success": false
+          },
+          {
+            "id": "003",
+            "name": "Samira Doe 3",
+            "role": "user",
+            "chat_success": false
+          }
+        ],
+        "confirmed": [
+          {
+            "id": "005",
+            "name": "Neimar",
+            "role": "admin",
+            "chat_success": true
+          },
+          {
+            "id": "009",
+            "name": "Jensen Ackles",
+            "role": "user",
+            "chat_success": true
+          }
+        ]
+      }
+    ],
+    "additional": "Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo. Nemo enim ipsam voluptatem, quia voluptas sit, aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos, qui ratione voluptatem sequi nesciunt, neque porro quisquam est, qui dolorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem."
+  }
+}

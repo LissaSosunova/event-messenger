@@ -1,0 +1,57 @@
+@import "variables"
+@import "type-default"
+@import "functions"
+.input
+  font:
+    family: $font-primary
+    size: 15px
+  border: 1px solid rgb(203, 207, 162)
+  border-radius:  20px
+  min-height: 15px
+  margin: 5px
+  padding: 10px
+
+input.input-primary
+  @extend .input
+  &:focus
+    border-color: map-get($font-color, 'primary')
+
+input.input-set-date
+  @extend .input
+  max-width: 150px
+  font:
+    size: 12px
+  &:focus
+    border-color: map-get($font-color, 'primary')
+
+
+.input-date
+  @extend .input
+  font-size: 12px
+  &:focus
+    border-color: map-get($font-color, 'primary')
+
+input.input-search
+  @extend .input
+  font-size: 12px
+  max-width: 180px
+  min-width: 150px
+  &:focus
+    border-color: map-get($bg-color, 'green')
+
+.input-enter-message
+  @extend .input
+  min-width: 250px
+  &:focus
+    border-color: map-get($font-color, 'primary')
+
+.text-block
+  @extend .input
+  background-color: map-get($bg-color, 'primary')
+  padding: 10px
+  margin: 2%
+  width: 90%
+  min-height: 20px
+  max-height: 150px
+  overflow: auto
+  outline: none

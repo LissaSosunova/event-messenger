@@ -1,0 +1,83 @@
+{
+  "user": {
+    "id": 3,
+    "username": "003",
+    "email": "new_user@gmail.com",
+    "name": "Samira Doe 3",
+    "access_token": "003",
+    "contacts": [
+      {
+        "id": "001",
+        "private_chat": "001003"
+      },
+      {
+        "id": "004",
+        "private_chat": "003004"
+      },
+      {
+        "id": "005",
+        "private_chat": "003005"
+      },
+      {
+        "id": "006",
+        "private_chat": "003006"
+      },
+      {
+        "id": "007",
+        "private_chat": "003007"
+      },
+      {
+        "id": "008",
+        "private_chat": "003008"
+      },
+      {
+        "id": "009",
+        "private_chat": "003009"
+      },
+      {
+        "id": "010",
+        "private_chat": "003010"
+      }
+    ],
+    "events": [
+      {
+        "id": "001"
+      },
+      {
+        "id": "002"
+      },
+      {
+        "id": "003"
+      },
+      {
+        "id": "004"
+      },
+      {
+        "id": "005"
+      },
+      {
+        "id": "006"
+      },
+      {
+        "id": "007"
+      },
+      {
+        "id": "008"
+      },
+      {
+        "id": "009"
+      },
+      {
+        "id": "010"
+      },
+      {
+        "id": "new_event"
+      }
+    ],
+    "chats": [
+      "001",
+      "002"
+    ],
+    "avatar": "./mock/api/users/003/photo_user.jpg"
+  }
+}
