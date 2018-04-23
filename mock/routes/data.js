@@ -207,4 +207,27 @@ function postMessege(req, res) {
     });
 }
 
-module.exports = { getUser, postDataUserById, getEventById, getChatById, postMessege, postUserProfile, postNewEvent };
+function setConfirmNew(req, res) {
+  let servicePromise;
+  if(req){
+    servicePromise = filereader(fs, './mock/api/users/new_user/get.json');
+    servicePromise
+      .then((response) => {
+        res.json(response.conf);
+      });
+  }
+
+}
+
+function postRegistrationNew(req, res) {
+  let servicePromise;
+
+  servicePromise = filereader(fs, './mock/api/users/new_user/post.json');
+  servicePromise
+    .then((response) => {
+      res.json(response.info);
+    });
+}
+
+
+module.exports = { getUser, postDataUserById, getEventById, getChatById, postMessege, postUserProfile, postNewEvent, postRegistrationNew, setConfirmNew };
