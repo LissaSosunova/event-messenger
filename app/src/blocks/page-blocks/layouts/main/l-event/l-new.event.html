@@ -15,7 +15,7 @@
         <div class="create-event-spacer"></div>
         <div class="col-xs-12
                     create-event-div-box">
-          <span class="event-name-list">Choose the date: </span>
+          <span class="event-name-list" id="chooseDate">Choose the date: </span>
           <i class="fa fa-chevron-right event-date-vote" aria-hidden="true" id="showVar" ng-click="openVarList()"></i>
           <div class="checkDate-div bg-gray-dark non-vis" id="dateList">
             <ul class="checkbox-ul">
@@ -44,32 +44,87 @@
           <div class="non-vis varlist" id="exDateDiap">
             <span class="event-name-list">From: </span>
             <input type="date"
-                   class="input-set-date">
+                   class="input-set-date"
+                   ng-model="params.dateDiapStart"
+                   ng-mouseleave="setDate(params.dateDiapStart)">
             <span class="event-name-list">to: </span>
             <input type="date"
-                   class="input-set-date">
+                   class="input-set-date"
+                   ng-model="params.dateDiapEnd"
+                   ng-mouseleave="setDate(params.dateDiapEnd)">
           </div>
           <div class="non-vis varlist" id="exDateDiapTime">
             <span class="event-name-list">From: </span>
             <input type="datetime-local"
-                   class="input-set-date">
+                   class="input-set-date"
+                   ng-model="params.dateDiapStart"
+                   ng-mouseleave="setDate(params.dateDiapStart)">
             <span class="event-name-list">to: </span>
             <input type="datetime-local"
-                   class="input-set-date">
+                   class="input-set-date"
+                   ng-model="params.dateDiapEnd"
+                   ng-mouseleave="setDate(params.dateDiapEnd)">
           </div>
           <br>
         </div>
       <div class="col-xs-12
-                    create-event-div-box">
-
-        <span class="event-name-list">Add date: </span>
-        <i class="fa fa-plus event-date-vote" aria-hidden="true"></i>
-        <br>
+                  non-vis"
+           id="addDates">
+        <span class="event-name-list" id="addDate">Add date: </span>
+        <i class="fa fa-plus event-date-vote" aria-hidden="true" id="showVar2" ng-click="addDatesAndAllow()"></i>
+        <div class="checkDate-div bg-gray-dark non-vis" id="dateList2">
+          <ul class="checkbox-ul">
+            <li ng-repeat="item in selectDates" class="checkbox-div-list">
+                <span class="check-dates-list"
+                      ng-attr-id="{{item.id+'2'}}"
+                      ng-click="chooseDateType2(item.showInpId + '2')">
+                  {{item.text}}
+                </span>
+            </li>
+          </ul>
+        </div>
+        <div class="non-vis varlist" id="exDate2">
+          <input type="date"
+                 class="input-set-date"
+                 ng-model="params.date2"
+                 ng-mouseleave="setDate(params.date2)">
+        </div>
+        <div class="non-vis varlist" id="exDateTime2">
+          <input type="datetime-local"
+                 class="input-set-date"
+                 ng-model="params.date2"
+                 ng-mouseleave="setDate(params.date2)">
+        </div>
+        <div class="non-vis varlist" id="exDateDiap2">
+          <span class="event-name-list">From: </span>
+          <input type="date"
+                 class="input-set-date"
+                 ng-model="params.dateDiapStart2"
+                 ng-mouseleave="setDate(params.dateDiapStart2)">
+          <span class="event-name-list">to: </span>
+          <input type="date"
+                 class="input-set-date"
+                 ng-model="params.dateDiapEnd2"
+                 ng-mouseleave="setDate(params.dateDiapEnd2)">
+        </div>
+        <div class="non-vis varlist" id="exDateDiapTime2">
+          <span class="event-name-list">From: </span>
+          <input type="datetime-local"
+                 class="input-set-date"
+                 ng-model="params.dateDiapStart2"
+                 ng-mouseleave="setDate(params.dateDiapStart2)">
+          <span class="event-name-list">to: </span>
+          <input type="datetime-local"
+                 class="input-set-date"
+                 ng-model="params.dateDiapEnd2"
+                 ng-mouseleave="setDate(params.dateDiapEnd2)">
+        </div>
       </div>
           <div class="col-xs-12
-                    create-event-div-box">
-            <span class="event-name-list">Allow voting for date:&amp;nbsp </span>
-            <i class="fa fa-toggle-off event-date-vote" id="dateVote" aria-hidden="true" ng-click="addDateVote()"></i>
+                    non-vis"
+                id="allowDates">
+            <span class="event-name-list">Allow voting for date:  </span>
+            <i class="fa fa-toggle-on event-date-vote" id="dateVote" aria-hidden="true" ng-click="addDateVote()"></i>
           </div>
         <div class="create-event-spacer"></div>
         <div class="col-xs-12
