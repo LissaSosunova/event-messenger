@@ -117,3 +117,4 @@ gulp.task('bundle:js', function() {
 
 gulp.task('build:local', ['localServer', 'sass', 'css:libs', 'bundle:js']);
 gulp.task('build:server', ['server', 'sass', 'css:libs', 'bundle:js']);
+gulp.task('build:mock', ['js.mock', 'sass', 'css:libs', 'bundle:js']);
