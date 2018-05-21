@@ -30,4 +30,7 @@ app.controller('main', function($scope, $flowDataUser, $transferService, $timeou
     $scope.main.eventSideBar = document.querySelector('.right-sidebar');
     $scope.main.content = document.querySelector('.content');
   })
+  $scope.main.contactListHandler = function(event) {
+    event.stopPropagation();
+  }
 });

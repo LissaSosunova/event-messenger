@@ -45,7 +45,6 @@ gulp.task('js.mock', function() {
     .pipe(concat('main.js'))
     .pipe(gulp.dest('./bin/js'));
 });
-
 //compile js for live server
 gulp.task('server', function() {
   return gulp.src([

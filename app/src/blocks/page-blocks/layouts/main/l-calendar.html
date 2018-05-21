@@ -13,14 +13,16 @@
             div-row-main-page-center
             ">
   <div class="col-xs-6
-              col-sm-6
+              col-sm-4
               col-md-3
               col-lg-3
               contact-list
+              no-vis-contact-list
               bg-gray-darker"
-       ui-view="contactList">left-sidebar</div>
-  <div class="col-xs-6
-              col-sm-6
+       ui-view="contactList"
+       ng-click="main.contactListHandler($event)">left-sidebar</div>
+  <div class="col-xs-12
+              col-sm-8
               col-md-6
               col-lg-6
               bg-gray-darker
@@ -34,5 +36,6 @@
               no-vis-sm-screen 
               right-sidebar
               bg-gray-darker"
-       ui-view="event">right-sidebar</div>
+       ui-view="event" ng-click="main.rightSidebarHandler($event)"
+       >right-sidebar</div>
 </div>

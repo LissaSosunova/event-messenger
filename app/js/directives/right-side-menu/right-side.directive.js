@@ -23,20 +23,23 @@ app.directive("rightSide", function () {
       $scope.currEvList = false;
       $scope.draftEvList = false;
 
-      $scope.showCurrEvList = function () {
+      $scope.showCurrEvList = function (event) {
         $scope.currEvList = !$scope.currEvList;
         plusCurr.classList.toggle("fa-plus");
         plusCurr.classList.toggle("fa-minus");
+        event.stopPropagation();
       };
 
-      $scope.showDraftList = function () {
+      $scope.showDraftList = function (event) {
         $scope.draftEvList = !$scope.draftEvList;
         plusDraft.classList.toggle("fa-plus");
         plusDraft.classList.toggle("fa-minus");
+        event.stopPropagation();
       };
 
       var oldId = '';
-      $scope.onClickEvent = function (id) {
+      $scope.onClickEvent = function (id, event) {
+        event.stopPropagation();
         if(oldId !== id){
           $flowDataEvent.getDataEvent({id: id})
             .then(function(response){
@@ -60,7 +63,8 @@ app.directive("rightSide", function () {
         })
       };
 
-      $scope.newEvent = function (data) {
+      $scope.newEvent = function (data, event) {
+        event.stopPropagation();
         $state.go(data);
         eventSideBar.classList.toggle('no-vis-sm-screen');
         eventSideBar.classList.toggle('is-vis-sm-screen');
