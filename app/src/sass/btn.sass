@@ -50,6 +50,10 @@ button
   transition: 0.2s
   @include set-border(0px, 50%)
 
+.button-menu
+  padding: 10px 12px
+  @include set-border(0px, 20px)
+
 input.btn-submit
   @extend .button-default
   @include color-light($bg-color, 'green', 5%)
@@ -233,6 +237,17 @@ input.btn-submit
     @include color-dark($bg-color, 'gray', 20%)
   &:active
     @include color-dark($bg-color, 'gray', 30%)
+
+.btn-cont
+  @extend .button-menu
+  font-size: 18px
+  background-color: map-get($bg-color, 'orange')
+  color: map-get($font-color, 'primary')
+  &:hover
+    cursor: pointer
+    @include color-light($bg-color, 'orange', 10%)
+    &:active
+      @include color-light($bg-color, 'orange', 30%)  
 
 .btn-right-side-menu-click
   &:hover
