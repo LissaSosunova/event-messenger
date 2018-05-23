@@ -2,7 +2,7 @@
             col-xs-12
             col-sm-12
             col-md-9
-            col-lg-10">
+            col-lg-9">
   <div class="div-logotype">
     <img ng-src="{{ loginPage.logotype }}" alt="EVENT messenger">
   </div>
@@ -51,6 +51,12 @@
       </div>
       <div class="col-xs-9">
         <input type="submit" ng-click="setReg(params)" class="btn-submit div-margin-top-login-page"  value="enter">
+      </div>
+      <div class="popup-message" id="myModal">
+        <div class="popup-message-content">
+          <span class="btn-close" ng-click="closePopup()">&times;</span>
+          <span class="txt-primary">{{ errorMessage }}</span>
+        </div>
       </div>
     </form>
   </div>

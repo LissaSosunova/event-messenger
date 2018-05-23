@@ -102,7 +102,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
 
   $scope.addDateVote = function () {
     if($scope.dateVote.hasClass('fa-toggle-on')){
-      checkBeforeSend(messCheckAllowDate);
+      openModalMessage(messCheckAllowDate);
       $scope.allowingForDates = false;
     } else if ($scope.dateVote.hasClass("fa-toggle-off")){
       $scope.allowingForDates = true;
@@ -163,21 +163,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
 
     return confdate;
   };
-  //Modal message function
-  function checkBeforeSend(mess) {
-    var modal = document.getElementById('myModal');
-    var span = document.getElementsByClassName("btn-close")[0];
-    $scope.errorMessage = mess;
-    modal.style.display = "block";
-    $scope.closePopup = function() {
-      modal.style.display = "none";
-    };
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-  }
+
    //Variables for modal messages
    let messCheckContacts = 'You did not select anyone to send the invitation. Select and save guests from the "Participations" list or save the event to drafts.',
      messCheckDate = 'You did not set any date and time. Choose the date in "date" field or save the event as draft.',
@@ -220,11 +206,11 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
       ]
     }
     if(guests.length <= 0){
-      checkBeforeSend(messCheckContacts);
+      openModalMessage(messCheckContacts);
     } else if(!$scope.formatedDate(params.date)){
-      checkBeforeSend(messCheckDate);
+      openModalMessage(messCheckDate);
     } else if(params.place === undefined){
-      checkBeforeSend(messCheckPlace);
+      openModalMessage(messCheckPlace);
     } else if (($scope.formatedDate(params.date)) || (guests.length > 0)){
       var paramsSend = {
         "id": "new_event",
@@ -268,7 +254,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
   //POST save draft
   $scope.saveEvent = function(params){
   if(!params.name){
-    checkBeforeSend(messNoTittle);
+    openModalMessage(messNoTittle);
     return;
   }
     if($scope.allowingForDates === false){

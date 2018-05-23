@@ -1,17 +1,17 @@
 app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource, $defaultService, $q) {
   let authorisation_token = function () {
-      return 'Bearer ' + sessionStorage.getItem("token");
+      return sessionStorage.getItem("token");
     };
 
 	let _$data = {},
 		_url = $defaultService.getURI();
 
-    _$data.auth = $resource(_url + '/signin/',{},{
+    _$data.auth = $resource(_url + '/login/',{},{
 		action:{
 			method: "POST"
 		}
 	});
-  _$data.registration = $resource(_url + '/register/',{},{
+  _$data.registration = $resource(_url + '/user/',{},{
     action: {
       method: "POST"
     }
@@ -23,22 +23,39 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
         /**
          * @return {string}
          */
-        'Authorization': authorisation_token()
+        'x-auth': authorisation_token()
+      }
+    }
+  });
+  _$data.confirm = $resource(_url + '/confirmation/',{},{
+    action: {
+      method: "GET",
+      params: {
+        token: "@token"
       }
     }
   });
   _$data.new_event = $resource(_url + '/new_event/',{},{
     action: {
-      method: "POST"
+      method: "POST",
+      headers: {
+        /**
+         * @return {string}
+         */
+        'Authorization': authorisation_token()
+      }
     }
   });
 
-	_$data.main = $resource(_url + '/user/:token', {},{
+	_$data.main = $resource(_url + '/user/', {},{
 		action:{
 			method: "GET",
-			params:{
-				token:"@token"
-			}
+      headers: {
+        /**
+         * @return {string}
+         */
+        'Authorization': authorisation_token()
+      }
 		}
 	});
 
@@ -47,22 +64,40 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
       method: "GET",
       params:{
         data:"@id"
+      },
+      headers: {
+        /**
+         * @return {string}
+         */
+        'Authorization': authorisation_token()
       }
     }
   });
 
-	_$data.chats = $resource(_url + '/chat/:id', {}, {
+	_$data.chats = $resource(_url + '/chat/:token', {}, {
 	  action: {
 	    method: "GET",
       params: {
-        data:"@id"
+	      params: "@token"
+      },
+      headers: {
+        /**
+         * @return {string}
+         */
+        'Authorization': authorisation_token()
       }
     }
   });
 
   _$data.sendMes = $resource(_url + '/sendmes/',{},{
     action:{
-      method: "POST"
+      method: "POST",
+      headers: {
+        /**
+         * @return {string}
+         */
+        'Authorization': authorisation_token()
+      }
     }
   });
 

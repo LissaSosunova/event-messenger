@@ -219,15 +219,15 @@ function setConfirmNew(req, res) {
 
 }
 
-function postRegistrationNew(req, res) {
-  let servicePromise;
+// function postRegistrationNew(req, res) {
+//   let servicePromise;
+//
+//   servicePromise = filereader(fs, './mock/api/users/new_user/post.json');
+//   servicePromise
+//     .then((response) => {
+//       res.json(response.info);
+//     });
+// }
 
-  servicePromise = filereader(fs, './mock/api/users/new_user/post.json');
-  servicePromise
-    .then((response) => {
-      res.json(response.info);
-    });
-}
 
-
-module.exports = { getUser, postDataUserById, getEventById, getChatById, postMessege, postUserProfile, postNewEvent, postRegistrationNew, setConfirmNew };
+module.exports = { getUser, postDataUserById, getEventById, getChatById, postMessege, postUserProfile, postNewEvent, setConfirmNew };
