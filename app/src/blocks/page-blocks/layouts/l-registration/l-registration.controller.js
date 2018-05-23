@@ -1,12 +1,20 @@
-app.controller('l-registration', function($scope, $state, $flowDataRegistr, $transferService){
+app.controller('l-registration', function($scope, $state, $flowDataRegistr, $timeout, $transferService){
   $scope.loginPage = {
     logotype: "app/img/main/logo_login_page.png"
   };
   let loginForm = document.getElementById('hide-form');
   $scope.setReg = params => $flowDataRegistr.requestRegistr(params)
     .then(response => {
-        $scope.message = "Check your email " +params.email+ " for the confirmation";
-        loginForm.classList.toggle('non-vis');
+        if(response.name !== 'MongoError'){
+          $scope.message = "You created new user. Go to login page and use your login: " + params.username;
+          loginForm.classList.toggle('non-vis');
+          $timeout(function(){
+            $state.go('login');
+          }, 3000);
+        } else if(response.name === 'MongoError'){
+          $scope.message = "No for " + params.username;
+          openModalMessage("User with this ID " + params.username +" or e-mail " +params.email +" is already exit. Try again.");
+        }
       },
       error => $scope.message = error);
 
@@ -21,5 +29,19 @@ app.controller('l-registration', function($scope, $state, $flowDataRegistr, $tra
   $scope.onKeyUp = function (id) {
     getKeyboardEventResult(id);
   };
-
+  //Modal message function
+  function openModalMessage(mess) {
+    var modal = document.getElementById('myModal');
+    var span = document.getElementsByClassName("btn-close")[0];
+    $scope.errorMessage = mess;
+    modal.style.display = "block";
+    $scope.closePopup = function() {
+      modal.style.display = "none";
+    };
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  }
 });

@@ -14,8 +14,10 @@ $font-color: (
   'dark-gray': rgba(82, 118, 95, 1),
   'dark': rgba(94, 116, 25, 1),
   'green': rgba(155, 176, 15, 1),
-  'orange': rgba(251, 195, 37, 1)
+  'orange': rgba(251, 195, 37, 1),
+  'warning': white
 );
 
 $footer-height: 65px;
 $header-height: 70px;
+$error-mes: white;

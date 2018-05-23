@@ -25,6 +25,7 @@ app.get("/", function (req, res) {
 app.route('/user/:id/')
   .get($data.getUser);
 
+
 app.route('/event/:id/')
   .get($data.getEventById);
 
