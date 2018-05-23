@@ -55,13 +55,23 @@ body
 .div-row-footer
   display: flex
   flex-direction: row
-  position: fixed
+  position: absolute
   bottom: 0
   min-height: $footer-height
   align-items: center
   padding-left: 10px
   padding-right: 5px
-  width: 48%
+  width: 85%
+
+.div-footer
+  display: flex
+  flex-direction: row
+  bottom: 0
+  min-height: $footer-height
+  align-items: center
+  padding-left: 10px
+  padding-right: 5px
+  width: 85%
 
 .div-row-enter-mess
   display: flex
@@ -95,4 +105,18 @@ body
   .is-vis-sm-screen
     top: $header-height
     right: 0
-    transition: 0.5s   
+    transition: 0.5s
+
+@media screen and (max-width: 62em)
+  .div-row-footer
+    width: 65% 
+
+@media screen and (max-width: 48em)
+  .contact-list
+    position: absolute
+    top: $header-height
+    z-index: 5
+    height: calc(100% -  (#{$header-height}))
+
+  .div-row-footer
+    width: 100%       

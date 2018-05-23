@@ -11,10 +11,17 @@
   margin: 5px
   padding: 10px
 
+input.input-login
+  @extend .input
+  &:focus
+    border-color: map-get($font-color, 'primary')
+  width: 100% 
+
 input.input-primary
   @extend .input
   &:focus
     border-color: map-get($font-color, 'primary')
+  width: 75%  
 
 input.input-set-date
   @extend .input
@@ -35,7 +42,7 @@ input.input-search
   @extend .input
   font-size: 12px
   max-width: 180px
-  min-width: 150px
+  width: 68%
   &:focus
     border-color: map-get($bg-color, 'green')
 
@@ -50,7 +57,7 @@ input.input-search
   background-color: map-get($bg-color, 'primary')
   padding: 10px
   margin: 2%
-  width: 90%
+  width: 85%
   min-height: 20px
   max-height: 150px
   overflow: auto

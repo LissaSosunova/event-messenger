@@ -5,19 +5,21 @@
             bg-gray-dark
             left-sidebar">
   <div>
-    <form class ='search'>
-      <input class="input-search" ng-model="query" type="text" placeholder="Искать в контактах...">
+    <form class ="search">
+      <input class="input-search" ng-model="query" type="text" placeholder="Search contact...">
       <button type="submit" class="btn-round-ok-xs" value=""><div class="icon"><i class="fa fa-search" aria-hidden="true"></i></div></button>
     </form>
   </div>
   <div class="contactList-user" ng-repeat="item in main.dataUser.contacts | filter:{name:query}">
     <div class="user-contactList-photo"><img ng-src="{{ item.avatar}}"></div>
-    <div class="user-contactList-name" ng-click="onClickContact(item.private_chat)">{{item.name}}</div>
+    <div class="user-contactList-name" 
+    ng-click="onClickContact(item.private_chat, $event)"
+    ng-class="{'current-contact': item.private_chat == main.currID}">{{item.name}}</div>
   </div>
-  <div class="col-xs-12
+</div>
+<div class="col-xs-12
             col-sm-12
             col-md-12
             col-lg-12">
     <div data-settings="" data-model="main.settings"></div>
-  </div>
 </div>

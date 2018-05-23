@@ -16,6 +16,9 @@
   &:hover, &:active
     cursor: pointer
 
+.contact-list-hider
+  display: none
+
 .header-chat-name
   color: map-get($font-color, 'dark-gray')
   font:
@@ -25,3 +28,8 @@
 
 .hide-scroll
   overflow: hidden
+
+@media screen and (max-width: 48em)
+  .contact-list-hider
+    display: block
+    cursor: pointer
