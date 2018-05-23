@@ -38,7 +38,7 @@ body
   padding-left: 16px
   padding-right: 16px
   padding-top: 16px
-
+    
 .right-sidebar
     height: calc(100% -  (#{$header-height}))
     overflow: auto
@@ -94,6 +94,31 @@ body
   top: $header-height
   right: 0
   transition: 0.5s
+
+form.search
+  width: 100%
+  
+::-webkit-scrollbar
+    width: 7px
+
+.content:hover ::-webkit-scrollbar-track
+    @include color-light($bg-color, 'orange', 10%)
+
+.content:hover ::-webkit-scrollbar-thumb
+    @include color-dark($bg-color, 'orange', 10%)
+
+.contact-list:hover ::-webkit-scrollbar-thumb
+    @include color-dark($bg-color, 'orange', 10%)
+
+.contact-list:hover ::-webkit-scrollbar-track
+    @include color-light($bg-color, 'orange', 10%)
+
+.right-sidebar:hover ::-webkit-scrollbar-track
+    @include color-light($bg-color, 'orange', 10%)
+
+.right-sidebar:hover ::-webkit-scrollbar-thumb
+    @include color-dark($bg-color, 'orange', 10%)
+
 
 @media screen and (max-width: 62em)
 
