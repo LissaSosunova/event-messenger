@@ -8,9 +8,9 @@
       <div class="col-xs-10">
         <span class="txt-header">"{{model.title}}" by {{ model.creator }}</span>
       </div>
-      <div class="col-xs-2">
+      <div class="col-xs-2"> Edit Title
         <button class="btn-round-cancel-xs">
-          <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="openEditor"></i>
+          <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editTitle"></i>
         </button>
       </div>
     </div>
@@ -31,14 +31,21 @@
           <tr>
             <th>Dates</th>
             <th>Votes</th>
+            <th>Edit</th>
           </tr>
           <tr ng-repeat="item in model.dateDrafts">
             <td class="txt-main-gray">{{item.date}}</td>
             <td class="txt-description-invert">{{item.votes}}</td>
+            <td>
+              <button class="btn-round-cancel-xs">
+                <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editDate"></i>
+              </button>
+            </td>
           </tr>
         </table>
       </div>
     </div>
+
 
     <div class="col-xs-12
                     create-event-div-box">
@@ -53,6 +60,9 @@
                   col-sm-9
                   col-sx-9">
         <span class="txt-main-gray non-vis" id="placeConfr">{{model.placeConf}} </span>
+        <button class="btn-round-cancel-xs">
+          <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editPlace"></i>
+        </button>
         <table class="table table-condensed non-vis" id="placeDrafts">
           <tr>
             <th>Places</th>
@@ -120,8 +130,8 @@
             col-sm-12
             col-md-12
             col-lg-12"
-            id="footer">
-      <input type="submit" class="btn-save-xs non-vis"  value="send invites" ng-click="openEditEvent(model.id)" id="sendInv">
+         id="footer">
+      <input type="submit" class="btn-save-xs non-vis"  value="send invites" ng-click="sendNewEvent(params)" id="sendInv">
       <input type="submit" class="btn-info-xs non-vis"  value="save event" ng-click="sendNewEvent(params)" id="saveEv">
       <input type="submit" class="btn-save-xs non-vis"  value="confirm participation" id="confEv">
       <input type="submit" class="btn-warning-xs non-vis"  value="delete draft" id="delDraft">

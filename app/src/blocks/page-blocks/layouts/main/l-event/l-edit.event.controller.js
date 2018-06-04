@@ -1,4 +1,4 @@
-app.controller('l-view.event', function($scope, $flowDataEvent, $transferService, $state, $timeout){
+app.controller('l-edit.event', function($scope, $flowDataEvent, $transferService, $state, $timeout){
   let ctrl = this;
 
   $scope.btnConfEv = angular.element(document.querySelector('#confEv'));
@@ -21,7 +21,7 @@ app.controller('l-view.event', function($scope, $flowDataEvent, $transferService
       renderAll();
     } else {
       var id = "";
-      var idEvent = window.location.href.toString().split("/view-event/");
+      var idEvent = window.location.href.toString().split("/edit-event/");
       for(let i=0; i < idEvent.length; i++){
         id = idEvent[1];
       }
@@ -87,7 +87,6 @@ app.controller('l-view.event', function($scope, $flowDataEvent, $transferService
     //creating model
     $scope.model = {
       status: $scope.viewEvent.status,
-      id: $scope.viewEvent.id,
       title: $scope.viewEvent.name,
       creator: creator,
       members: {
@@ -132,8 +131,5 @@ app.controller('l-view.event', function($scope, $flowDataEvent, $transferService
         $scope.btnDelDraft.toggleClass('non-vis').val('decline participation');
       }
     });
-  };
-  $scope.openEditEvent = function (id) {
-    $state.go('edit-event', {'id': id});
   }
 });
