@@ -19,8 +19,7 @@ app.use(function(req, res, next) {
 
 
 //
-// app.route('/event/:id/')
-//   .get($data.getEventById);
+
 //
 // app.route('/chat/:id/')
 //   .get($data.getChatById);
@@ -31,6 +30,9 @@ app.use(function(req, res, next) {
 // app.route('/profile')
 //   .post($data.postUserProfile);
 //
+app.route('/event/:id/')
+  .get($event);
+
 app.route('/new_event')
   .post($event);
 
@@ -44,7 +46,7 @@ app.route('/finduser')
   .post($user);
 
 app.route('/adduser')
-  .post($user);  
+  .post($user);
 
 app.route('/login')
   .post($login);

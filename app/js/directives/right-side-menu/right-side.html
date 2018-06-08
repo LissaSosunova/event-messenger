@@ -5,10 +5,10 @@
     </li>
   </ul>
   <div class="btn-right-side-menu">
-    {{model.currentEvents.title}}
+    Current events
     <i class="fa fa-plus icon-size-xs icon-color-menu btn-right-side-menu-click" id="curr" aria-hidden="true" ng-click="showCurrEvList($event)" ng-model="currEvList" ng-init="currEvList"></i>
     <div  ng-if="currEvList">
-      <ul ng-repeat="item in model.currentEvents.data | filter:{name:$root.queryEvent}">
+      <ul ng-repeat="item in model.model.currentEvents.data | filter:{name:$root.queryEvent}">
         <li class="event-menu__list btn-right-side-menu-click" ng-click="onClickEvent(item.id, $event)" ng-repeat="x in item.date">{{ item.name }}
           <br>
           <span class="txt-description">{{x.confirmed}}</span></li>
@@ -16,10 +16,10 @@
     </div>
   </div>
   <div class="btn-right-side-menu">
-    {{model.draftEvents.title}}
+    Draft events
     <i class="fa fa-plus icon-size-xs icon-color-menu btn-right-side-menu-click" id="draft" aria-hidden="true" ng-click="showDraftList($event)" ng-model="draftEvList" ng-init="draftEvList"></i>
     <div ng-if="draftEvList">
-      <ul ng-repeat="item in model.draftEvents.data | filter:{name:$root.queryEvent}">
+      <ul ng-repeat="item in model.model.draftEvents.data | filter:{name:$root.queryEvent}">
         <li class="event-menu__list btn-right-side-menu-click" ng-click="onClickEvent(item.id, $event)">{{ item.name }}</li>
       </ul>
     </div>

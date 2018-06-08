@@ -33,30 +33,51 @@ class UserData {
   }
 }
 
-
-
 /**
  * При поступлении запроса типа POST эта функция шифрует пароль с помощью bcrypt и сохраняет результат в БД.
  * При любых ошибках выдает статус 500 - Internal Server Error
  * При удаче - возвращает 201
  */
 router.post('/user', function (req, res, next){
+
+  let params = {
+    $or: [
+      {username: req.body.username},
+      {email: req.body.email}
+    ]
+  };
+  let dublicate = {
+    name: 'MongoError'
+  };
   var user = new User;
   user.username = req.body.username;
   user.email = req.body.email;
-  user.name = user.name || user.username;
+  user.name = "No name";
   user.avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNLzZszQbQf6jkknIGI8A3rj-0BoEngyi9156njfrCjPED9_b2vw";
+  user.events = [];
   var password = req.body.password;
-  bcrypt.hash(password, 10, function(err, hash){
-    if (err) res.json(err)
-    else {
-      user.password = hash;
-      user.save(function (err) {
-        if (err) res.json(err)
-        else res.sendStatus(201)
-      })
-    }
-  })
+
+  let servicePromise = datareader(User, params);
+  servicePromise
+    .then((response) =>{
+      if (response !== null){
+        res.json(dublicate);
+      } else {
+        bcrypt.hash(password, 10, function(err, hash){
+          if (err) res.json(err)
+          else {
+            user.password = hash;
+            user.save(function (err) {
+              if (err) res.json(err)
+              else res.sendStatus(201)
+            })
+          }
+        })
+      }
+    })
+
+
+
 });
 
 
@@ -84,60 +105,12 @@ router.get('/user', function (req, res, next) {
       {email: auth.username}
     ]
   };
-  
+
   let servicePromise = datareader(User, params);
   servicePromise
         .then((response) =>{
         var user = new UserData(response);
-          return new Promise((resolve, reject) => {
-            let eventsAll = {
-                currentEvents: {
-                  title: "Current Events",
-                  data: []
-                },
-                draftEvents: {
-                  title: "Draft Events",
-                  data: []
-                }
-              },
-              oneEvent = {},
-              stop = 0,
-              length = user.events.length,
-              data = user;
-            if(length === 0){
-              data.events = eventsAll;
-              res.json(user);
-            } else {
-              for (let i =0; i < length; i++){
-                let params = {_id: response.events[i]};
-                let newUserEvents = datareader(Event, params);
-                newUserEvents
-                  .then((response) => {
-                    if(response.status){
-                      eventsAll.currentEvents.data.push(oneEvent = {
-                        "name": response.name,
-                        "id": response._id,
-                        "status": response.status,
-                        "date": response.date
-                      });
-                    }
-                    if(!response.status){
-                      eventsAll.draftEvents.data.push(oneEvent = {
-                        "name": response.name,
-                        "id": response.id,
-                        "status": response.status
-                      })
-                    }
-                    stop++;
-                    if(length === stop){
-                      user.events = eventsAll;
-                      res.json(user);
-                    }
-                    return eventsAll;
-                  })
-              }
-            }
-          })
+          res.json(user);
         })
 });
 
@@ -178,7 +151,7 @@ router.post('/adduser', function (req, res, next) {
         return
         }
     })
-    if (query.id === auth.username) exsistCont = true; 
+    if (query.id === auth.username) exsistCont = true;
     if (exsistCont) return res.json({message: "This contact is already exists"});
       User.updateOne(params, {$push: {contacts: query}}, (e, d) => {
           if (e) throw new Error()
