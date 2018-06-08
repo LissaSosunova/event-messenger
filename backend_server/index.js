@@ -1,12 +1,13 @@
-let express = require('express');
-let app = express();
-let bodyParser = require('body-parser');
-let port = 5006;
-let $user = require('./user');
-let $login = require('./login');
-let $account = require('./account');
-let $event = require('./event');
-let $chat = require('./chat');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+const port = 5006;
+const $user = require('./user');
+const $login = require('./login');
+const $account = require('./account');
+const $event = require('./event');
+const $chat = require('./chat');
+const webSocketServer = require('./websockets');
 
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,9 +19,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.route('/sendmes')
-  .post($chat);
-//
 app.route('/profile')
   .post($user);
 //
@@ -48,16 +46,14 @@ app.route('/login')
 app.route('/account')
   .get($account);
 
-app.route('/chat/:id/')
-   .get($chat);
-
-app.route('/new_chat/')
-  .post($chat);
-
 app.route('/change_status/')
   .post($event);
+app.route('/chat')
+   .get($chat);
 
 app.listen(port);
 console.log("Backend server listening on port " + port);
+
+webSocketServer();
 
 module.exports = { app };

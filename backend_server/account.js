@@ -1,14 +1,14 @@
 // импортируем роутер
-var router = require('express').Router()
+const router = require('express').Router()
 
 // импортируем jwt для декодирования web-token'а
-var jwt = require('jwt-simple')
+const jwt = require('jwt-simple')
 
 // импортируем конфиг
-var config = require('./config')
+const config = require('./config')
 
 // импортируем модель user
-var User = require('./models/user')
+const User = require('./models/user')
 
 /**
  * Эта функция при попытке доступа к URL без корректного web-token'а возвращает 401. При наличии оного - возвращает имя пользователя.
@@ -16,11 +16,12 @@ var User = require('./models/user')
 
 router.get('/account', function(req, res, next){
   console.log('req.headers: ' + req.headers, typeof  req);
+  let username;
     if (!req.headers['authorization']) {
       console.log('Err 1');
       return res.sendStatus(401)}
     try {
-        var username = jwt.decode(req.headers['authorization'], config.secretkey).username
+        username = jwt.decode(req.headers['authorization'], config.secretkey).username
     } catch(err) {
       console.log('Err 2');
         return res.sendStatus(401)

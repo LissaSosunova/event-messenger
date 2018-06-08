@@ -9,5 +9,5 @@ class TransferService {
 		return this.data[name];
 	}
 }
-let transfer = new TransferService ();
+const transfer = new TransferService ();
 module.exports = transfer;

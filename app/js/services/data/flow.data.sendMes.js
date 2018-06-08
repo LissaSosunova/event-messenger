@@ -4,5 +4,5 @@ app.service('$postSendMes', function($data, $q){
       $data.sendMes.action(param, resp => resp? resolve(resp) : reject(resp));
     });
     return  promise;
-  }
+  };
 })

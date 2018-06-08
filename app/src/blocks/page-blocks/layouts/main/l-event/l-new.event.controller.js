@@ -1,7 +1,11 @@
-app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferService){
+app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferService, $socket){
   let ctrl = this,
     guests = [],
     setDateSend;
+    let chatIdObj = {};
+    chatIdObj.prev = $transferService.getData('chatIdPrev');
+    chatIdObj.curr = undefined;
+    $socket.sendSocket(chatIdObj);
     $scope.dateVote = angular.element(document.querySelector('#dateVote'));
     $scope.placeVote = angular.element(document.querySelector('#placeVote'));
     $scope.nameList = angular.element(document.querySelector('#nameList'));

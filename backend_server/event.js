@@ -1,10 +1,10 @@
-var router = require('express').Router();
-var bcrypt = require('bcrypt');
-var jwt = require('jwt-simple');
-var Event = require('./models/event');
-var User = require('./models/user');
-var config = require('./config');
-var datareader = require('./datareader');
+const router = require('express').Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jwt-simple');
+const Event = require('./models/event');
+const User = require('./models/user');
+const config = require('./config');
+const datareader = require('./datareader');
 
 class EventData {
   constructor(event) {
@@ -17,21 +17,22 @@ class EventData {
 }
 
 router.post('/new_event', function (req, res, next){
+  let auth;
   if(!req.headers['authorization']) {
     return res.sendStatus(401)
   }
   try {
-    var auth = jwt.decode(req.headers['authorization'], config.secretkey);
+    auth = jwt.decode(req.headers['authorization'], config.secretkey);
   } catch (err) {
     return res.sendStatus(401)
   }
-  let params = {
+  const params = {
     $or: [
       {username: auth.username},
       {email: auth.username}
     ]
   };
-  let event = new Event;
+  const event = new Event;
   event.name = req.body.name;
   event.status = req.body.status;
   event.date = req.body.date;
@@ -42,8 +43,8 @@ router.post('/new_event', function (req, res, next){
   event.save(function (err) {
     if (err) { res.json(err)}
     else {
-      let createdEvent = new EventData(event);
-      datareader(User, params)
+      const createdEvent = new EventData(event);
+      datareader(User, params, 'findOne')
         .then((response) =>{
           User.updateOne({username: response.username}, {$push: {events:createdEvent}}, (e, d) => {
             if (e) throw new Error();
@@ -93,22 +94,23 @@ router.get('/event/:id/', function (req, res, next) {
 });
 
 router.post('/change_status/', function (req, res, next) {
+  let auth;
   if(!req.headers['authorization']) {
     return res.sendStatus(401)
   }
   try {
-    var auth = jwt.decode(req.headers['authorization'], config.secretkey);
+    auth = jwt.decode(req.headers['authorization'], config.secretkey);
   } catch (err) {
     return res.sendStatus(401)
   }
-  let idNotification = req.body.id;
-  let params = {
+  const idNotification = req.body.id;
+  const params = {
     $or: [
       {username: auth.username},
       {email: auth.username}
     ]
   };
-  datareader(User, params)
+  datareader(User, params, 'findOne')
     .then(response =>{
       User.updateOne({"username" : response.username, "notifications.id" : idNotification},
         {

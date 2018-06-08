@@ -1,11 +1,16 @@
-app.controller('calendar.controller', function($scope, $compile, $timeout, uiCalendarConfig, $transferService){
+app.controller('calendar.controller', function($scope, $compile, $timeout, uiCalendarConfig, $transferService, $socket){
   
   let date = new Date();
   let d = date.getDate();
   let m = date.getMonth();
   let y = date.getFullYear();
-  
-  $scope.events = $transferService.getData('eventsForCalendar') 
+
+  let chatIdObj = {};
+  chatIdObj.prev = $transferService.getData('chatIdPrev');
+  chatIdObj.curr = undefined;
+  $socket.sendSocket(chatIdObj);
+
+  $scope.events = $transferService.getData('eventsForCalendar'); 
   
   $scope.eventsF = function (start, end, timezone, callback) {
     let s = new Date(start).getTime() / 1000;

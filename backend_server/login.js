@@ -1,17 +1,17 @@
 // импортируем роутер
-var router = require('express').Router();
+const router = require('express').Router();
 
 // импортируем bcrypt, здесь он нужен для сверки пароля с хешем из БД
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 // импортируем jwt чтобы создавать web-token'ы для последующей отправки пользователю
-var jwt = require('jwt-simple');
+const jwt = require('jwt-simple');
 
 // импортируем файл конфигурации
-var config = require('./config');
+const config = require('./config');
 
 // импортируем модельку user
-var User = require('./models/user');
+const User = require('./models/user');
 
 
 
@@ -52,7 +52,7 @@ router.post ('/login', function(req, res, next){
             if (!valid){
               return res.json({message: "Incorrect password"}).status(401);
             }
-            var token = jwt.encode({username: username}, config.secretkey)
+            const token = jwt.encode({username: username}, config.secretkey)
             res.json({"success": true, access_token: token});
           })
         })

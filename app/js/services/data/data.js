@@ -61,6 +61,14 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
       }
     }
   });
+  _$data.confirm = $resource(_url + '/confirmation/',{},{
+    action: {
+      method: "GET",
+      params: {
+        token: "@token"
+      }
+    }
+  });
   _$data.new_event = $resource(_url + '/new_event/',{},{
     action: {
       method: "POST",
@@ -72,7 +80,6 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
       }
     }
   });
-
 
 
   _$data.event = $resource(_url + '/event/:id', {},{
@@ -90,12 +97,9 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
     }
   });
 
-	_$data.chats = $resource(_url + '/chat/:id', {},{
+	_$data.chats = $resource(_url + '/chat', {},{
     action:{
       method: "GET",
-      params:{
-        data:"@id"
-      },
       headers: {
         'Authorization': $token.getToken
       }

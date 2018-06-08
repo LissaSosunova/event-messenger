@@ -7,6 +7,9 @@ app.directive("binding", function() {
             function read() {
                 let html = element.html();
                 html = html.replace(/&nbsp;/g, "\u00a0");
+                html = html.replace("<br>", "");
+                html = html.replace("<div>", "");
+                html = html.replace("</div>", "");
                 ngModel.$setViewValue(html);
             }
             ngModel.$render = function() {
