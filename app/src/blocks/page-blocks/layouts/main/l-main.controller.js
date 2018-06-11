@@ -1,7 +1,7 @@
 app.controller('main', function($scope, $flowDataUser, $transferService, $timeout){
 
   let _token = $transferService.getData('token') || sessionStorage.getItem('token');
-
+  
   $scope.main = $scope.main || {};
   $scope.main.eventsForCalendar = [];
   $scope.getUserDataById = params => $flowDataUser.getDataUser(params)

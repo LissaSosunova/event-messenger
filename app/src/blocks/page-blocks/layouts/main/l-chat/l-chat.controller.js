@@ -13,8 +13,9 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     $scope.main.footer = document.querySelector('.div-row-footer');
     $scope.main.hiddenDiv = document.querySelector('.hiddenDiv');
     $scope.main.showArrow = false;
+    $scope.main.note = document.querySelector('#note');
   }
-
+  
     function idChat () {
     var id = window.location.href.toString().split("/chat/");
     for (let i = 0; i < id.length; i++) {
@@ -71,7 +72,7 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     let currentTime = new Date();
     let month = currentTime.getMonth() + 1;
     if (!$scope.main.message) return;
-    if(id == undefined) {
+    if(!id) {
       id = idChat();
     }
     let sender = {
@@ -121,5 +122,6 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     $scope.main.footer.clientHeight;
     $scope.main.chatWrapper.style.height = $scope.main.chatHeightVis+"px";
     $scope.main.chatWrapper.scrollTo(0, $scope.main.contentChatHeight-$scope.main.chatHeightVis);
+    $scope.main.note.style.bottom = $scope.main.footer.clientHeight + "px";
   })
 });

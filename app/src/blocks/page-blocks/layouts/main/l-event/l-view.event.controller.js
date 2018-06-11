@@ -29,7 +29,6 @@ app.controller('l-view.event', function($scope, $flowDataEvent, $transferService
     }
   }
 
-
   function renderAll() {
     let dateDrafts = [],
       dateConf = "",
@@ -113,6 +112,7 @@ app.controller('l-view.event', function($scope, $flowDataEvent, $transferService
   }
 
   $scope.openEditor = function () {
+    
     $scope.$watch('main.userName', function(newValue) {
       if(!$scope.main.userName){
         return;

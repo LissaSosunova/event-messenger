@@ -5,11 +5,12 @@ app.controller('main.contactList', function($scope, $flowDataChats, $transferSer
   function _init () {
     $scope.main = $scope.main || {};
     $scope.main.contactList = document.querySelector('.contact-list');
+    $scope.main.currID = $transferService.getData('currID');
   }
 
   $scope.onClickContact = function (id, event) {
     $state.go('chat', {'id': id});
-    $scope.main.currID = id;
+    $transferService.setData({name: 'currID', data: id});
     event.stopPropagation();
     $flowDataChats.getDataChats({id: id})
       .then(function(response){
@@ -23,7 +24,6 @@ app.controller('main.contactList', function($scope, $flowDataChats, $transferSer
       }
       else {
         $scope.main.dataUser = newVal;
-        $scope.main.chatId = $scope.main.dataUser.chats[0];
       }
     });
 });
