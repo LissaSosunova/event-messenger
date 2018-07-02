@@ -13,6 +13,9 @@
 
 open 2-n windows http://localhost:3003/ws/
 
+Run backend server (with MongoDB)
+`npm run backend`
+
 Run mock server
 `npm run mock`
 

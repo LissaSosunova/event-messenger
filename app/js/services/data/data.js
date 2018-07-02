@@ -1,8 +1,8 @@
 app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource, $defaultService, $q) {
   let authorisation_token = function () {
-      return sessionStorage.getItem("token");
+    var xToken = sessionStorage.getItem("token");
+      return xToken;
     };
-
 	let _$data = {},
 		_url = $defaultService.getURI();
 
@@ -16,6 +16,14 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
       method: "POST"
     }
     });
+  _$data.main = $resource(_url + '/user/', {},{
+    action:{
+      method: "GET",
+      headers: {
+     'Authorization': sessionStorage.getItem("token")
+      }
+    }
+  });
   _$data.profile = $resource(_url + '/profile/',{},{
     action: {
       method: "POST",
@@ -23,7 +31,7 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
         /**
          * @return {string}
          */
-        'x-auth': authorisation_token()
+        'Authorization': authorisation_token()
       }
     }
   });
@@ -47,17 +55,7 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
     }
   });
 
-	_$data.main = $resource(_url + '/user/', {},{
-		action:{
-			method: "GET",
-      headers: {
-        /**
-         * @return {string}
-         */
-        'Authorization': authorisation_token()
-      }
-		}
-	});
+
 
   _$data.event = $resource(_url + '/event/:id', {},{
     action:{

@@ -1,17 +1,9 @@
 let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
-let router = require('express').Router();
 let port = 5006;
 let $data = require('./routes/data');
-let $user = require('./user');
-let $login = require('./login');
 $data.collections = require('./routes/services/collections');
-router.use(bodyParser.json());
-
-router.use(require('./user'));
-router.use(require('./login'));
-router.use(require('./account'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,8 +22,8 @@ app.get("/", function (req, res) {
     return res.json({ message: "Hello! Its API!" })
 });
 
-// app.route('/user/:id/')
-//   .get($data.getUser);
+app.route('/user/:id/')
+  .get($data.getUser);
 
 app.route('/event/:id/')
   .get($data.getEventById);
@@ -51,11 +43,8 @@ app.route('/profile')
 app.route('/new_event')
   .post($data.postNewEvent);
 
-app.route('/user')
-  .post($user);
-
-app.route('/login')
-  .post($login);
+app.route('/register')
+  .post($data.postRegistrationNew);
 
 app.route('/confirmation')
   .get($data.setConfirmNew);

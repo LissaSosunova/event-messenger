@@ -26,20 +26,32 @@ router.post ('/login', function(req, res, next){
     } else {
         var username = req.body.username;
         var password = req.body.password;
-        User.findOne({username: username})
+        User.findOne(
+          {
+            $or: [
+              {username: username},
+              {email: username}
+            ]
+          }
+           )
         .select('password') // указываем явно, что нам нужно значение поля password (ибо его выборка отключена в модели)
         .exec(function(err, user){
             if (err) {
-                return res.sendStatus(500)
+                return res.json(err)
             }
-            if (!user) {return res.sendStatus(401)}
+            if (!user) {
+              console.log('no user');
+              return res.json(err)}
             bcrypt.compare(password, user.password, function(err, valid){
             if (err) {
-              return res.sendStatus(500)
+              console.log(err);
+              return res.json(err)
             }
-            if (!valid){ return res.sendStatus(401)}
+            if (!valid){
+              console.log('not valid');
+              return res.json(err)}
             var token = jwt.encode({username: username}, config.secretkey)
-            res.send(token)
+            res.json({"success": true, access_token: token})
           })
         })
     }
