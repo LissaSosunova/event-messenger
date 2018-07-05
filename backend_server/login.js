@@ -22,7 +22,8 @@ var User = require('./models/user')
 
 router.post ('/login', function(req, res, next){
     if (!req.body.username || !req.body.password) {
-        return res.sendStatus(400) // если один или оба параметра запроса опущены, возвращаем 400 - Bad Request
+        console.log('Bad auth');
+        return res.json({message: "Bad auth"}).status(401);// если один или оба параметра запроса опущены, возвращаем 400 - Bad Request
     } else {
         var username = req.body.username;
         var password = req.body.password;
@@ -41,7 +42,8 @@ router.post ('/login', function(req, res, next){
             }
             if (!user) {
               console.log('no user');
-              return res.json(err)}
+              return res.json({message: "Incorrect user"}).status(401);
+              }
             bcrypt.compare(password, user.password, function(err, valid){
             if (err) {
               console.log(err);
@@ -49,9 +51,10 @@ router.post ('/login', function(req, res, next){
             }
             if (!valid){
               console.log('not valid');
-              return res.json(err)}
+              return res.json({message: "Incorrect password"}).status(401);
+            }
             var token = jwt.encode({username: username}, config.secretkey)
-            res.json({"success": true, access_token: token})
+            res.json({"success": true, access_token: token});
           })
         })
     }

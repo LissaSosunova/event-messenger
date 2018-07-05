@@ -1,8 +1,4 @@
-app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource, $defaultService, $q) {
-  let authorisation_token = function () {
-    var xToken = sessionStorage.getItem("token");
-      return xToken;
-    };
+app.factory('$data', ['$resource', '$defaultService', '$token', function ($resource, $defaultService, $token) {
 	let _$data = {},
 		_url = $defaultService.getURI();
 
@@ -20,7 +16,7 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
     action:{
       method: "GET",
       headers: {
-     'Authorization': sessionStorage.getItem("token")
+     'Authorization': $token.getToken
       }
     }
   });
@@ -31,7 +27,7 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
         /**
          * @return {string}
          */
-        'Authorization': authorisation_token()
+        'Authorization': $token.getToken
       }
     }
   });
@@ -50,7 +46,7 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
         /**
          * @return {string}
          */
-        'Authorization': authorisation_token()
+        'Authorization': $token.getToken
       }
     }
   });
@@ -67,7 +63,7 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
         /**
          * @return {string}
          */
-        'Authorization': authorisation_token()
+        'Authorization': $token.getToken
       }
     }
   });
@@ -82,7 +78,7 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
         /**
          * @return {string}
          */
-        'Authorization': authorisation_token()
+        'Authorization': $token.getToken
       }
     }
   });
@@ -94,11 +90,10 @@ app.factory('$data', ['$resource', '$defaultService', '$q', function ($resource,
         /**
          * @return {string}
          */
-        'Authorization': authorisation_token()
+        'Authorization': $token.getToken
       }
     }
   });
-
 
   return _$data;
 }]);

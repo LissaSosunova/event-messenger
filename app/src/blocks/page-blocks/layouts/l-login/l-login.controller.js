@@ -12,7 +12,8 @@ app.controller('l-login', function($scope, $state, $flowDataAuth, $transferServi
               sessionStorage.setItem('token', _token);
               $state.go('main');
             },
-            error => $scope.errorMessage = error.message);
+            error => {$scope.errorMessage = error.message;
+          });
   };
 
   $scope.goToTestPage = function () {
