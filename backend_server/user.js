@@ -13,11 +13,9 @@ var Event = require('./models/event');
 var config = require('./config');
 
 function datareader(collection, params) {
-  return new Promise(function (resolve, reject) {
-    collection.findOne(params, function (e, d) {
-
+  return new Promise( (resolve, reject) => {
+    collection.findOne(params,  (e, d) => {
       if (e) reject(e);
-
       else resolve(d);
     })
   })
@@ -46,18 +44,16 @@ router.post('/user', function (req, res, next){
   var user = new User;
   user.username = req.body.username;
   user.email = req.body.email;
-  user.name = "Unnamed";
+  user.name = user.name || user.username;
   user.avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNLzZszQbQf6jkknIGI8A3rj-0BoEngyi9156njfrCjPED9_b2vw";
   var password = req.body.password;
   bcrypt.hash(password, 10, function(err, hash){
-    if (err){res.json(err)}
+    if (err) res.json(err)
     else {
       user.password = hash;
       user.save(function (err) {
-        if (err) { res.json(err)}
-        else {
-          res.sendStatus(201)
-        }
+        if (err) res.json(err)
+        else res.sendStatus(201)
       })
     }
   })
@@ -88,44 +84,12 @@ router.get('/user', function (req, res, next) {
       {email: auth.username}
     ]
   };
+  
   let servicePromise = datareader(User, params);
   servicePromise
-    .then((response) =>{
-      return new Promise(function(resolve, reject) {
-        let contactsArr = [],
-          oneUser = {},
-          stop = 0,
-          length = response.contacts.length,
-          data = response;
-        if (length === 0) {
-          data.contacts = contactsArr;
-          resolve(response);
-        } else {
-          for (let i = 0; i < length; i++) {
-            let params = {username: response.contacts[i]};
-            let newUserContacts = datareader(User, params);
-            newUserContacts
-              .then((response) => {
-                oneUser = {
-                  "name": response.name,
-                  "id": response.username,
-                  "avatar": response.avatar
-                };
-                contactsArr.push(oneUser);
-                stop = stop + 1;
-                if (length === stop) {
-                  data.contacts = contactsArr;
-                  response = data;
-                  resolve(response);
-                }
-                return contactsArr;
-              });
-          }
-        }
-      })
         .then((response) =>{
         var user = new UserData(response);
-          return new Promise(function(resolve, reject){
+          return new Promise((resolve, reject) => {
             let eventsAll = {
                 currentEvents: {
                   title: "Current Events",
@@ -148,23 +112,23 @@ router.get('/user', function (req, res, next) {
                 let params = {_id: response.events[i]};
                 let newUserEvents = datareader(Event, params);
                 newUserEvents
-                  .then((response) =>{
-                    if(response.status === true){
+                  .then((response) => {
+                    if(response.status){
                       eventsAll.currentEvents.data.push(oneEvent = {
-                        "name": response.event.name,
+                        "name": response.name,
                         "id": response._id,
                         "status": response.status,
                         "date": response.date
                       });
                     }
-                    if(response.status === false){
+                    if(!response.status){
                       eventsAll.draftEvents.data.push(oneEvent = {
                         "name": response.name,
                         "id": response.id,
                         "status": response.status
                       })
                     }
-                    stop = stop + 1;
+                    stop++;
                     if(length === stop){
                       user.events = eventsAll;
                       res.json(user);
@@ -175,9 +139,52 @@ router.get('/user', function (req, res, next) {
             }
           })
         })
-
-    })
-
 });
+
+router.post('/finduser', function (req, res, next) {
+  let query = req.body.param;
+  if (query != "") {
+    User.find({$or:[{username: {$regex: query}}, {email: {$regex: query}}]},  (e, d) => {
+      if (e) throw new Error()
+      else {
+        res.json(d)
+      }
+    })
+  }
+  else {
+    res.end()
+  }
+})
+
+router.post('/adduser', function (req, res, next) {
+  let exsistCont = false;
+  let query = req.body;
+  try {
+    var auth = jwt.decode(req.headers['authorization'], config.secretkey);
+  } catch (err) {
+    return res.sendStatus(401)
+  }
+  let params = {
+    $or: [
+      {username: auth.username},
+      {email: auth.username}
+    ]
+  };
+  datareader(User, params)
+  .then(response => {
+    response.contacts.forEach(item => {
+      if (query.id === auth.username || item.id === query.id ) {
+        exsistCont = true;
+        return
+        }
+    })
+    if (query.id === auth.username) exsistCont = true; 
+    if (exsistCont) return res.json({message: "This contact is already exists"});
+      User.updateOne(params, {$push: {contacts: query}}, (e, d) => {
+          if (e) throw new Error()
+          else res.json(d)
+    })
+  });
+})
 
 module.exports = router;

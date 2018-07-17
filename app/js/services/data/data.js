@@ -20,6 +20,23 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
       }
     }
   });
+  _$data.findUser = $resource(_url + '/finduser/', {},{
+    action:{
+      method: "POST",
+      isArray: true,
+      headers: {
+     'Authorization': $token.getToken
+      }
+    }
+  });
+  _$data.addUser = $resource(_url + '/adduser/', {},{
+    action:{
+      method: "POST",
+      headers: {
+     'Authorization': $token.getToken
+      }
+    }
+  });
   _$data.profile = $resource(_url + '/profile/',{},{
     action: {
       method: "POST",
