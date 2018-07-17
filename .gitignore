@@ -9,3 +9,5 @@ mock/node_modules
 mock/package-lock.json
 backups
 mock/JSON_Schems
+backend_server/node_modules
+backend_server/package-lock.json
