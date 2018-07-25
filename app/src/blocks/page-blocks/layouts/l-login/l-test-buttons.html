@@ -34,7 +34,7 @@
 </div>
 <br>
 <br>
-<div class="row">
+<div class="row colors">
   <div class="col-xs-3
               col-sm-3
               col-md-3
@@ -257,20 +257,57 @@
   </div>
 </div>
 <br>
-<div class="row">
+
+<svg class="clip-svg-out">
+    <defs>
+      <clipPath id="icon-out" clipPathUnits="objectBoundingBox">
+        <!--<circle cx="1" cy="0" r="0.5"  /> -->
+        <polyline points="1 1, 0 1, 0 0" /> 
+        <!--<path d="M0, 0 A1, 1 0 0,0 1, 1" /> -->
+      </clipPath>
+    </defs>
+  </svg>
+<svg class="clip-svg-in">
+    <defs>
+      <clipPath id="icon-in" clipPathUnits="objectBoundingBox">
+        <!--<circle cx="1" cy="0" r="0.5"  /> -->
+        <polyline points="1 0, 1 1, 0 1" /> 
+        <!--<path d="M1, 0 A1, 1 0 0,0 1, 1" />-->
+        
+      </clipPath>
+    </defs>
+  </svg>
+
+<div class="row messeges-box">
   <div class="bg-gray-darker
               col-xs-6
               col-sm-6
               col-md-6
               col-lg-6">
-    <div class="div-message-box">
-      <span class="message-name">User 001:</span>
-      <p class="message-text">This is my first message. If ypu want to tell me something - please, fill free! I'm waiting for your commentaries</p>
+    <div class="out-mes-wrap">          
+      <div class="div-message-box outcoming-message">
+        <span class="message-name">User 001:</span>
+        <p class="message-text">This is my first message. If you want to tell me something - please, fill free! I'm waiting for your commentaries</p>
+      </div><div class="icon-out"></div>
     </div>
-    <div class="div-message-box">
-      <span class="message-name">User 002:</span>
-      <p class="message-text">This is my first message. If ypu want to tell me something - please, fill free! I'm waiting for your commentaries</p>
+    <div class="out-mes-wrap">   
+      <div class="div-message-box outcoming-message">
+        <span class="message-name">User 001:</span>
+        <p class="message-text">Short message</p>
+      </div><div class="icon-out"></div>
     </div>
+    <div class="in-mes-wrap">  
+      <div class="icon-in"></div><div class="div-message-box incoming-message">
+        <span class="message-name">User 002:</span>
+        <p class="message-text">This is my first message. If you want to tell me something - please, fill free! I'm waiting for your commentaries</p>
+      </div>
+    </div>
+    <div class="in-mes-wrap">  
+      <div class="icon-in"></div><div class="div-message-box incoming-message">
+        <span class="message-name">User 002:</span>
+        <p class="message-text">Short message</p>
+      </div>
+    </div>  
     <div class="div-message-box-descr bg-gray-dark col-xs-4">
       <span class="txt-description">User 001 is typing...</span>
     </div>

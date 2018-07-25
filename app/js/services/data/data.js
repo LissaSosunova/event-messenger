@@ -85,16 +85,11 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
     }
   });
 
-	_$data.chats = $resource(_url + '/chat/:token', {}, {
+	_$data.chats = $resource(_url + '/chat/', {id: '@id'}, {
 	  action: {
 	    method: "GET",
-      params: {
-	      params: "@token"
-      },
+      isArray: true,
       headers: {
-        /**
-         * @return {string}
-         */
         'Authorization': $token.getToken
       }
     }

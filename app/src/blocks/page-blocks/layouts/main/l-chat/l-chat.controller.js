@@ -35,7 +35,7 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     $scope.main.head.clientHeight  -
     $scope.main.footer.clientHeight;
 
-    $scope.main.chatWrapper.onscroll = function(){
+    $scope.main.chatWrapper.onscroll = () => {
       let arrow = document.querySelector('#down');
       let scrolled = $scope.main.chatWrapper.pageYOffset || $scope.main.chatWrapper.scrollTop;
       $scope.main.chatHeightVis = document.documentElement.clientHeight -
@@ -62,13 +62,13 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
           }
         }
       };
-      $scope.scrollDown = function () {
+      $scope.scrollDown = () => {
         $scope.main.chatWrapper.scrollTo(0, $transferService.getData('currScroll'));
         };
       $scope.main.chatWrapper.scrollTo(0, $scope.main.contentChatHeight-$scope.main.chatHeightVis);
   }
 
-  $scope.sendMesHandler = function(author, id, text){
+  $scope.sendMesHandler = (author, id, text) => {
     let currentTime = new Date();
     let month = currentTime.getMonth() + 1;
     if (!$scope.main.message) return;
@@ -90,32 +90,36 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     $scope.main.message = "";
 
     $timeout(scrollHandler,100);
-    $timeout(function(){
+    $timeout(() => {
       $scope.main.chatWrapper.style.height = (document.documentElement.clientHeight -
       $scope.main.head.clientHeight -
       $scope.main.footer.clientHeight) + "px";
     },100)
   };
-  $scope.sendMesEnter = function (event) {
+  $scope.sendMesEnter = event => {
     if (event.shiftKey && event.charCode == 13) return;
     else if (event.charCode == 13) {
       $scope.sendMesHandler($scope.main.userName, $scope.main.currID, $scope.main.message);
       event.preventDefault();
     }
   }
-  $scope.$watch(function() {
+  $scope.$watch(() => {
     return $transferService.getData('chats')
-  }, function(newVal){
+  }, newVal => {
     $scope.main.chats = newVal;
       $timeout(arrowScrollHandler)
   });
 
   let note = document.querySelector('#note');
-  $scope.showNote = function () {
+  $scope.showNote = () => {
     note.classList.toggle('non-vis');
   }
-
-  $scope.$watch('main.inputMesHeight', function(newVal){
+  $scope.$watch(()=> {
+    return $transferService.getData('currID')},
+    newVal => {
+      $scope.main.currID = newVal;
+  })
+  $scope.$watch('main.inputMesHeight', newVal => {
     $scope.main.currInputMesHeight = newVal;
     $scope.main.chatHeightVis = document.documentElement.clientHeight -
     $scope.main.head.clientHeight  -

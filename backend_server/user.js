@@ -8,18 +8,12 @@ var jwt = require('jwt-simple');
 // импортируем модель пользователя и евента
 var User = require('./models/user');
 var Event = require('./models/event');
+var Chat = require('./models/chats');
+var datareader = require('./datareader');
 
 // импортируем файл конфигурации (баловство, конечно, надо генерировать это на лету и хранить где-нибудь)
 var config = require('./config');
 
-function datareader(collection, params) {
-  return new Promise( (resolve, reject) => {
-    collection.findOne(params,  (e, d) => {
-      if (e) reject(e);
-      else resolve(d);
-    })
-  })
-}
 
 class UserData {
   constructor(user) {
@@ -50,8 +44,11 @@ router.post('/user', function (req, res, next){
     name: 'MongoError'
   };
   var user = new User;
+  var chat = new Chat;
   user.username = req.body.username;
+  chat.username = user.username;
   user.email = req.body.email;
+  chat.email = user.email;
   user.name = "No name";
   user.avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNLzZszQbQf6jkknIGI8A3rj-0BoEngyi9156njfrCjPED9_b2vw";
   user.events = [];
@@ -67,17 +64,18 @@ router.post('/user', function (req, res, next){
           if (err) res.json(err)
           else {
             user.password = hash;
-            user.save(function (err) {
+            user.save(err => {
               if (err) res.json(err)
               else res.sendStatus(201)
+            })
+            chat.save(err => {
+              if (err) console.log(err)
+              else console.log("chat doc was saved")
             })
           }
         })
       }
     })
-
-
-
 });
 
 
@@ -106,6 +104,44 @@ router.get('/user', function (req, res, next) {
     ]
   };
 
+    User.findOne(params, (e, d) => {
+        if (e) throw new Error()
+        else {
+          let userContacts = d.contacts;
+          for (let i=0; i<userContacts.length; i++) {
+            User.findOne({username: userContacts[i].id}, (e, d) => {
+              if (e) throw new Error()
+              else {
+                userContacts[i].name = d.name;
+                User.updateOne(params, {$set: {contacts: userContacts}}, (e, d) => {
+                  if (e) throw new Error()
+                  else console.log(d)
+                })
+              }
+            })
+          }
+        }  
+      })
+  
+    User.findOne(params, (e, d) => {
+    if (e) throw new Error()
+    else {
+      let userChats = d.chats;
+      for (let i=0; i<userChats.length; i++) {
+        User.findOne({username: userChats[i].id}, (e, d) => {
+          if (e) throw new Error()
+          else {
+            userChats[i].name = d.name;
+            User.updateOne(params, {$set: {chats: userChats}}, (e, d) => {
+              if (e) throw new Error()
+              else console.log(d)
+            })
+          }
+        })
+      }
+    }  
+  })
+  
   let servicePromise = datareader(User, params);
   servicePromise
         .then((response) =>{
@@ -119,9 +155,7 @@ router.post('/finduser', function (req, res, next) {
   if (query != "") {
     User.find({$or:[{username: {$regex: query}}, {email: {$regex: query}}]},  (e, d) => {
       if (e) throw new Error()
-      else {
-        res.json(d)
-      }
+      else res.json(d)
     })
   }
   else {

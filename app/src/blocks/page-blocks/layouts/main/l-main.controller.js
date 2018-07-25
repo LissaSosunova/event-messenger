@@ -11,13 +11,12 @@ app.controller('main', function($scope, $flowDataUser, $transferService, $timeou
         $scope.main.eventsAll = response.events;
         $scope.main.userName = response.name;
         $scope.main.avatar = response.avatar;
-
-        $scope.main.eventsAll.forEach(function (item, i) {
+        $scope.main.eventsAll.forEach((item, i) => {
           if($scope.main.eventsAll[i].status === false){
             $scope.main.draftEventsArr.push($scope.main.eventsAll[i]);
           }
         });
-        $scope.main.eventsAll.forEach(function (item, i) {
+        $scope.main.eventsAll.forEach((item, i) => {
           if($scope.main.eventsAll[i].status === true){
             $scope.main.currentEventsArr.push($scope.main.eventsAll[i]);
           }
@@ -33,7 +32,7 @@ app.controller('main', function($scope, $flowDataUser, $transferService, $timeou
           }
         };
 
-        $scope.main.currentEventsArr.forEach(function (item, index) {
+        $scope.main.currentEventsArr.forEach((item, index) => {
           let eventDate = item.date[0].confirmed;
           let eventDay = eventDate.substr(0, 2);
           let eventMonth = eventDate.substr(3, 2);
@@ -49,14 +48,12 @@ app.controller('main', function($scope, $flowDataUser, $transferService, $timeou
   $scope.getUserData();
   $scope.main.settings = $scope.main.settings || {};
   $scope.main.searchEvents = $scope.main.searchEvents || {};
-  $timeout(function () {
+  $timeout(() => {
     $scope.main.eventSideBar = document.querySelector('.right-sidebar');
     $scope.main.content = document.querySelector('.content');
   });
 
-  $scope.main.contactListHandler = function (event) {
+  $scope.main.contactListHandler =  event => {
     event.stopPropagation();
   }
 });
-
-
