@@ -8,18 +8,11 @@ var jwt = require('jwt-simple');
 // импортируем модель пользователя и евента
 var User = require('./models/user');
 var Event = require('./models/event');
+var datareader = require('./datareader');
 
 // импортируем файл конфигурации (баловство, конечно, надо генерировать это на лету и хранить где-нибудь)
 var config = require('./config');
 
-function datareader(collection, params) {
-  return new Promise( (resolve, reject) => {
-    collection.findOne(params,  (e, d) => {
-      if (e) reject(e);
-      else resolve(d);
-    })
-  })
-}
 
 class UserData {
   constructor(user) {
@@ -67,7 +60,7 @@ router.post('/user', function (req, res, next){
           if (err) res.json(err)
           else {
             user.password = hash;
-            user.save(function (err) {
+            user.save(err => {
               if (err) res.json(err)
               else res.sendStatus(201)
             })
@@ -75,9 +68,6 @@ router.post('/user', function (req, res, next){
         })
       }
     })
-
-
-
 });
 
 
@@ -105,7 +95,7 @@ router.get('/user', function (req, res, next) {
       {email: auth.username}
     ]
   };
-
+  
   let servicePromise = datareader(User, params);
   servicePromise
         .then((response) =>{
@@ -119,9 +109,7 @@ router.post('/finduser', function (req, res, next) {
   if (query != "") {
     User.find({$or:[{username: {$regex: query}}, {email: {$regex: query}}]},  (e, d) => {
       if (e) throw new Error()
-      else {
-        res.json(d)
-      }
+      else res.json(d)
     })
   }
   else {
