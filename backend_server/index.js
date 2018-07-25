@@ -40,6 +40,12 @@ app.route('/user')
 app.route('/user')
   .get($user);
 
+app.route('/finduser')
+  .post($user);
+
+app.route('/adduser')
+  .post($user);  
+
 app.route('/login')
   .post($login);
 

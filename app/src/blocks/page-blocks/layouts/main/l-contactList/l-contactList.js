@@ -1,4 +1,5 @@
-app.controller('main.contactList', function($scope, $flowDataChats, $transferService, $state, $timeout){
+app.controller('main.contactList', function($scope, $flowDataChats, $flowDataFindUser,
+$transferService, $state, $flowDataAddUser, $flowDataUser, $timeout){
   let ctrl = this;
   ctrl.$onInit = _init;
 
@@ -18,6 +19,46 @@ app.controller('main.contactList', function($scope, $flowDataChats, $transferSer
       });
     return id;
   };
+
+  $('.tabs-nav li').click(function(event){
+    event.preventDefault();
+    let id = $(this).children('a').attr('href');
+	  $('.tab').removeClass('is-vis-tab');
+	  $('.tabs-nav li').removeClass('curr-tab');
+	  $(this).addClass('curr-tab');
+    $(id).addClass('is-vis-tab');
+  })
+
+  $scope.searchContact = item => {
+    $flowDataFindUser.findUser(item)
+      .then(response => {
+        $scope.searchRes = response;
+        $scope.errMes = "";
+      }, error => {
+        $scope.searchRes = error;
+          $scope.errMes = "Nothing found";
+      });
+    
+  }
+
+  $scope.addContact = index => {
+    let userObj = {}
+    let id = $scope.searchRes[index].username;
+    let name = $scope.searchRes[index].name;
+    let avatar = $scope.searchRes[index].avatar;
+    userObj.id = id;
+    userObj.name = name;
+    userObj.avatar = avatar;
+  
+    $flowDataAddUser.addUser(userObj)
+      .then(response => {
+        $flowDataUser.getDataUser()
+        .then(response => {
+        $scope.main.userData = response;
+        });
+      })
+  }
+   
   $scope.$watch('main.userData', function(newVal){
       if (!$scope.main.userData) {
         return

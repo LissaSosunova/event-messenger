@@ -3,13 +3,13 @@ app.controller('main', function($scope, $flowDataUser, $transferService, $timeou
   $scope.main = $scope.main || {};
   $scope.main.eventsForCalendar = [];
 
-  $scope.getUserDataById = () => $flowDataUser.getDataUser()
+  $scope.getUserData = () => $flowDataUser.getDataUser()
     .then(response => {
         $scope.main.userData = response;
         $scope.main.eventsAll = response.events;
         $scope.main.userName = response.name;
         $scope.main.avatar = response.avatar;
-
+        
         $scope.main.eventsAll.currentEvents.data.forEach(function (item, index) {
           let eventDate = item.date[0].confirmed;
           let eventDay = eventDate.substr(0, 2);
@@ -23,7 +23,7 @@ app.controller('main', function($scope, $flowDataUser, $transferService, $timeou
         $transferService.setData({name: 'eventsForCalendar', data: $scope.main.eventsForCalendar})
       },
       error => $scope.errorMessage = error.info.message)
-  $scope.getUserDataById();
+  $scope.getUserData();
   $scope.main.settings = $scope.main.settings || {};
   $scope.main.searchEvents = $scope.main.searchEvents || {};
   $timeout(function () {

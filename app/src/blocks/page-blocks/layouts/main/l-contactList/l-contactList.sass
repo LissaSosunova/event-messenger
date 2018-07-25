@@ -2,7 +2,7 @@
 @import "../../../../../sass/type-default"
 @import "../../../../../sass/functions"
 
-.contactList-user
+.contactList-user, .chats-list
     height: 80px
     width: 100%
     display: flex
@@ -28,6 +28,43 @@
 
     .current-contact
         color: white
+
+.tab
+    display: none
+
+.is-vis-tab.tab
+    display: block
+
+.tabs-nav ul
+    list-style: none
+    text-align: center
+    margin: 0
+
+.tabs-nav li
+    display: inline-block
+    cursor: pointer
+    border-bottom: solid white
+    border-right: solid white   
+    border-left: solid white
+    width: 65px
+    text-align: center 
+    font:
+        size: 14px
+        weight: map-get($font-message, 'name-weight')
+        style: map-get($font-message, 'name-style')
+
+.tabs-nav
+    margin: 15px 0
+
+.tabs-nav a
+    color: black
+    text-decoration: none
+
+.curr-tab a
+    color: white
+
+.tabs-nav li:nth-child(2), .tabs-nav li:nth-child(3)
+    margin-left: -3px
 
 
 
