@@ -5,12 +5,23 @@
                 col-lg-12">
     <div class="col-xs-12
                     create-event-div-box">
-      <div class="col-xs-10">
-        <span class="txt-header">"{{model.title}}" by {{ model.creator }}</span>
+      <div class="col-xs-9">
+        <span class="txt-header" id="title">"{{model.title}}" by {{ model.creator }}</span>
+        <div class="non-vis"  id="newTitle">
+          <input type="text"
+                 class="input-primary non-vis"
+                 placeholder="{{model.title}}"
+                 ng-value="params.title"
+                 ng-model="params.title"
+                 required>
+          <button class="btn-round-cancel-xs">
+            <i class="fa fa-check icon-color" aria-hidden="true" ng-click="confirmEditTitle(params.title, 'title', 'newTitle', 'editTitleBtn')" id="confTitle"></i>
+          </button>
+        </div>
       </div>
-      <div class="col-xs-2"> Edit Title
+      <div class="col-xs-3" id="editTitleBtn"> <span class="span-edited-element">Edit Title</span>&nbsp;
         <button class="btn-round-cancel-xs">
-          <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editTitle"></i>
+          <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor('title', 'newTitle', 'editTitleBtn')"></i>
         </button>
       </div>
     </div>
@@ -38,7 +49,7 @@
             <td class="txt-description-invert">{{item.votes}}</td>
             <td>
               <button class="btn-round-cancel-xs">
-                <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editDate"></i>
+                <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editDates"></i>
               </button>
             </td>
           </tr>
@@ -60,17 +71,20 @@
                   col-sm-9
                   col-sx-9">
         <span class="txt-main-gray non-vis" id="placeConfr">{{model.placeConf}} </span>
-        <button class="btn-round-cancel-xs">
-          <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editPlace"></i>
-        </button>
         <table class="table table-condensed non-vis" id="placeDrafts">
           <tr>
             <th>Places</th>
             <th>Votes</th>
+            <th>Edit</th>
           </tr>
           <tr ng-repeat="item in model.placeDrafts">
             <td class="txt-main-gray">{{item.place}}</td>
             <td class="txt-description-invert">{{item.votes}}</td>
+            <td>
+              <button class="btn-round-cancel-xs">
+                <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor()" id="editDate"></i>
+              </button>
+            </td>
           </tr>
         </table>
       </div>
@@ -88,7 +102,10 @@
                   col-sm-9
                   col-sx-9">
         <div ng-repeat="item in model.members.membersInv">
-          <span>{{item.name}}</span>&nbsp;&nbsp;
+          <span>{{item.name}}</span>&nbsp;&nbsp
+          <button class="btn-round-cancel-xs">
+          <i class="fa fa-remove icon-color" aria-hidden="true" ng-click="openEditor()" id={item.name></i>
+        </button>
         </div>
       </div>
     </div>
@@ -122,7 +139,22 @@
                   col-md-9
                   col-sm-9
                   col-sx-9">
-        <span class="txt-sm-gray">{{ model.additional }}</span>
+        <span class="txt-sm-gray" id="addInfo">{{ model.additional }}</span>
+        <div class="col-xs-10" id="editAddInfoBtn"> <span class="span-edited-element">Edit Additional information</span>&nbsp;
+          <button class="btn-round-cancel-xs">
+            <i class="fa fa-pencil icon-color" aria-hidden="true" ng-click="openEditor('addInfo', 'newAddInfo', 'editAddInfoBtn')" ></i>
+          </button>
+        </div>
+        <div class="non-vis"  id="newAddInfo">
+          <textarea type="text" rows="6"
+                    class="input-primary"
+                    id="additional"
+                    placeholder="{{model.additional}}"
+                    ng-model="params.additional"></textarea>
+          <button class="btn-round-cancel-xs">
+            <i class="fa fa-check icon-color" aria-hidden="true" ng-click="confirmEditAditional(params.additional, 'addInfo', 'newAddInfo', 'editAddInfoBtn')" id="confAdditional"></i>
+          </button>
+        </div>
       </div>
     </div>
     <div class="div-row-footer
@@ -131,10 +163,16 @@
             col-md-12
             col-lg-12"
          id="footer">
-      <input type="submit" class="btn-save-xs non-vis"  value="send invites" ng-click="sendNewEvent(params)" id="sendInv">
-      <input type="submit" class="btn-info-xs non-vis"  value="save event" ng-click="sendNewEvent(params)" id="saveEv">
+      <input type="submit" class="btn-save-xs"  value="send invites" ng-click="sendNewEvent(params)" id="sendInv">
+      <input type="submit" class="btn-info-xs"  value="save event" ng-click="sendNewEvent(params)" id="saveEv">
       <input type="submit" class="btn-save-xs non-vis"  value="confirm participation" id="confEv">
-      <input type="submit" class="btn-warning-xs non-vis"  value="delete draft" id="delDraft">
+      <input type="submit" class="btn-warning-xs"  value="delete draft" id="delDraft">
+    </div>
+    <div class="popup-message" id="myModal">
+      <div class="popup-message-content">
+        <span class="btn-close" ng-click="closePopup()">&times;</span>
+        <span class="txt-primary">{{ errorMessage }}</span>
+      </div>
     </div>
   </div>
 </div>

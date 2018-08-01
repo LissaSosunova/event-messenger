@@ -1,5 +1,6 @@
-app.controller('l-edit.event', function($scope, $flowDataEvent, $transferService, $state, $timeout){
-  let ctrl = this;
+app.controller('l-edit.event', function($scope, $flowDataEvent, $transferService, $state, $postNewEvent){
+  let ctrl = this,
+    guests = [];
 
   $scope.btnConfEv = angular.element(document.querySelector('#confEv'));
   $scope.btnSaveEv = angular.element(document.querySelector('#saveEv'));
@@ -10,6 +11,7 @@ app.controller('l-edit.event', function($scope, $flowDataEvent, $transferService
   $scope.placeConfr = angular.element(document.querySelector('#placeConfr'));
   $scope.dateConfr = angular.element(document.querySelector('#dateConfr'));
   $scope.dateDrafts = angular.element(document.querySelector('#dateDrafts'));
+  $scope.title = angular.element(document.querySelector('#title'));
 
   ctrl.$onInit = _onInit;
 
@@ -110,26 +112,216 @@ app.controller('l-edit.event', function($scope, $flowDataEvent, $transferService
         return $scope.viewEvent;
       });
   }
+  //Edit params
+  $scope.openEditor = function (id1, id2, id3) {
 
-  $scope.openEditor = function () {
-    $scope.$watch('main.userName', function(newValue) {
-      if(!$scope.main.userName){
-        return;
+    $scope.editableId1 = angular.element(document.querySelector('#'+id1));
+    $scope.editableId2 = angular.element(document.querySelector('#'+id2));
+    $scope.editableId3 = angular.element(document.querySelector('#'+id3));
+
+    $scope.editableId1.toggleClass('non-vis');
+    $scope.editableId2.toggleClass('non-vis');
+    $scope.editableId3.toggleClass('non-vis');
+  };
+
+  $scope.confirmEditTitle = function (newValue, id1, id2, id3) {
+    $scope.editableId1 = angular.element(document.querySelector('#'+id1));
+    $scope.editableId2 = angular.element(document.querySelector('#'+id2));
+    $scope.editableId3 = angular.element(document.querySelector('#'+id3));
+
+    $scope.model.title = newValue;
+    $scope.editableId1.toggleClass('non-vis');
+    $scope.editableId2.toggleClass('non-vis');
+    $scope.editableId3.toggleClass('non-vis');
+  };
+
+  $scope.confirmEditAditional = function (newValue, id1, id2, id3) {
+    $scope.editableId1 = angular.element(document.querySelector('#'+id1));
+    $scope.editableId2 = angular.element(document.querySelector('#'+id2));
+    $scope.editableId3 = angular.element(document.querySelector('#'+id3));
+
+    $scope.model.additional = newValue;
+    $scope.editableId1.toggleClass('non-vis');
+    $scope.editableId2.toggleClass('non-vis');
+    $scope.editableId3.toggleClass('non-vis');
+  }
+
+  function checkBeforeSend(mess) {
+    var modal = document.getElementById('myModal');
+    var span = document.getElementsByClassName("btn-close")[0];
+    $scope.errorMessage = mess;
+    modal.style.display = "block";
+    $scope.closePopup = function() {
+      modal.style.display = "none";
+    };
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
       }
-      $scope.main.userName = newValue;
-      $scope.btnOpenEd.toggleClass('fa-pencil').toggleClass('fa-close');
-      if(($scope.model.status === true) && ($scope.model.creator === $scope.main.userName)){
-        $scope.btnDelDraft.toggleClass('non-vis').val('delete event');
-      } else if (($scope.model.status === true) && ($scope.model.creator !== $scope.main.userName)){
-        $scope.btnDelDraft.toggleClass('non-vis').val('cancel participation');
-      } else if (($scope.model.status === false) && ($scope.model.creator === $scope.main.userName)){
-        $scope.btnSendInv.toggleClass('non-vis');
-        $scope.btnDelDraft.toggleClass('non-vis');
-        $scope.btnSaveEv.toggleClass('non-vis');
-      } else if (($scope.model.status === false) && ($scope.model.creator !== $scope.main.userName)){
-        $scope.btnConfEv.toggleClass('non-vis');
-        $scope.btnDelDraft.toggleClass('non-vis').val('decline participation');
+    }
+  }
+  //Variables for modal messages
+  let messCheckContacts = 'You did not select anyone to send the invitation. Select and save guests from the "Participations" list or save the event to drafts.',
+    messCheckDate = 'You did not set any date and time. Choose the date in "date" field or save the event as draft.',
+    messCheckPlace = 'You did not set any place. Choose the date in "Place" field or save the event as draft.',
+    messCheckAllowDate = 'You want to disable voting for the dates, it means that all dates will be approved. If you want to enable voting, press "Allow voting for date" again.',
+    messNoTittle = 'You can not save an event without title. Set title in the field "Event title"';
+
+  //Send new Event
+  $scope.sendNewEvent = function(params){
+
+    // if($scope.allowingForDates === false){
+    //   setDateSend = [
+    //     {
+    //       "drafts": [
+    //         {
+    //           "date": '',
+    //           "votes": 0
+    //         }
+    //       ],
+    //       "confirmed": $scope.formatedDate(params.date)+ $scope.formatedDate(params.date2)
+    //     }
+    //   ]
+    //   console.log('exact date', setDateSend);
+    // } else if ($scope.allowingForDates === true){
+    //   console.log('vote date');
+    //   setDateSend = [
+    //     {
+    //       "drafts": [
+    //         {
+    //           "date": $scope.formatedDate(params.date),
+    //           "votes": 1
+    //         },
+    //         {
+    //           "date": $scope.formatedDate(params.date2),
+    //           "votes": 0
+    //         }
+    //       ],
+    //       "confirmed": ''
+    //     }
+    //   ]
+    // }
+    // if(guests.length <= 0){
+    //   checkBeforeSend(messCheckContacts);
+    // } else if(!$scope.formatedDate(params.date)){
+    //   checkBeforeSend(messCheckDate);
+    // } else if(params.place === undefined){
+    //   checkBeforeSend(messCheckPlace);
+    // } else if (($scope.formatedDate(params.date)) || (guests.length > 0)){
+
+    var newPlaces = function () {
+      let placeDraft = [],
+      allplaces = [],
+      confirmedPlace = '';
+      for (let i = 0; i < $scope.viewEvent.place.length; i++) {
+        for(let key in $scope.viewEvent.place[i]){
+          if($scope.viewEvent.place[i].confirmed === ''){
+            if(key === "drafts"){
+              placeDraft.push($scope.viewEvent.place[i][key]);
+            }
+          } else if ($scope.viewEvent.place[i].confirmed !== ''){
+            confirmedPlace = $scope.viewEvent.place[i].confirmed;
+          }
+          allplaces = [
+            {
+              "drafts": placeDraft
+            },
+            {
+              "confirmed": confirmedPlace
+            }
+          ]
+        }
+        console.log(allplaces);
+        return allplaces;
       }
-    });
+    };
+
+      var paramsSend = {
+        "id": "new_event",
+        "name": params.title,
+        "status": true,
+        "date": $scope.viewEvent.date,
+        "place": $scope.viewEvent.place,
+        "members": $scope.viewEvent.members,
+        "additional": params.additional
+      };
+      console.log(paramsSend);
+      $postNewEvent.newEvent(paramsSend)
+        .then(response => {
+            $state.go('main');
+          },
+          error => $scope.errorMessage = error.info.message);
+    // }
+  };
+
+  //POST save draft
+  $scope.saveEvent = function(params){
+    if(!params.name){
+      checkBeforeSend(messNoTittle);
+      return;
+    }
+    if($scope.allowingForDates === false){
+      setDateSend = [
+        {
+          "drafts": [
+            {
+              "date": '',
+              "votes": 0
+            }
+          ],
+          "confirmed": $scope.formatedDate(params.date)+ ' ' + $scope.formatedDate(params.date2)
+        }
+      ]
+      console.log('exact date', setDateSend);
+    } else if ($scope.allowingForDates === true){
+      console.log('vote date', $scope.formatedDate(params.date), $scope.formatedDate(params.date2));
+      setDateSend = [
+        {
+          "drafts": [
+            {
+              "date": $scope.formatedDate(params.date),
+              "votes": 1
+            },
+            {
+              "date": $scope.formatedDate(params.date2),
+              "votes": 0
+            }
+          ],
+          "confirmed": ''
+        }
+      ]
+    }
+    var paramsSend = {
+      "id": "new_event",
+      "name": params.name,
+      "status": false,
+      "date": setDateSend,
+      "place": [
+        {
+          "drafts": [
+            {
+              "place": '',
+              "votes": 0
+            }
+          ],
+          "confirmed": params.place
+        }
+      ],
+      "members": [
+        {
+          "invited": $scope.model.members.membersInv,
+          "confirmed": $scope.model.members.membersConf
+        }
+      ]
+    };
+    $postNewEvent.newEvent(paramsSend)
+      .then(response => {
+          $state.go('main');
+        },
+        error => $scope.errorMessage = error.info.message);
+  };
+
+  $scope.cancel = function () {
+    $state.go('main');
   }
 });

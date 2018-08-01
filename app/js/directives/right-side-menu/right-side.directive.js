@@ -1,9 +1,14 @@
 app.directive("rightSide", function () {
   return {
     scope: {
-      model: '='
+      model: '=?rightSide'
     },
-    controller: function ($scope, $state, $flowDataEvent, $transferService) {
+    controller: function ($scope, $state, $flowDataEvent, $transferService, $timeout) {
+
+      $scope.$watch('model',  function (newVal) {
+        return $scope.model = newVal;
+      });
+
       let plusCurr = document.getElementById("curr"),
           plusDraft = document.getElementById("draft"),
           eventSideBar = document.querySelector('.right-sidebar');
@@ -11,12 +16,10 @@ app.directive("rightSide", function () {
             {
               title: 'Create event' ,
               link: "new-event"
-
             },
             {
               title: 'My calendar' ,
               link: "calendar"
-
             }
           ];
 
