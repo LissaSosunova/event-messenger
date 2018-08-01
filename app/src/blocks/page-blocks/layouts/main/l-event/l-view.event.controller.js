@@ -70,14 +70,12 @@ app.controller('l-view.event', function($scope, $flowDataEvent, $transferService
       }
     }
     //creating members groups
-    for (let i = 0; i < $scope.viewEvent.members.length; i++) {
-      for(let key in $scope.viewEvent.members[i]){
-        if(key === "invited"){
-          membersInvited = $scope.viewEvent.members[i][key];
-        }
-        membersConf = $scope.viewEvent.members[i][key];
-      }
-    }
+    $scope.viewEvent.members.invited.forEach(function (item) {
+      membersInvited.push(item);
+    });
+    $scope.viewEvent.members.confirmed.forEach(function (item) {
+      membersConf.push(item);
+    });
     for (let i=0; i < membersConf.length; i++){
       if(membersConf[i].role === 'admin'){
         creator = membersConf[i].name;
@@ -112,7 +110,7 @@ app.controller('l-view.event', function($scope, $flowDataEvent, $transferService
   }
 
   $scope.openEditor = function () {
-    
+
     $scope.$watch('main.userName', function(newValue) {
       if(!$scope.main.userName){
         return;

@@ -128,7 +128,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
       if(allInp[i].checked){
         var invited = {
           "name": allInp[i].value,
-          "id": allInp[i].id,
+          "username": allInp[i].id,
           "role": "user",
           "chat_success": false
         };
@@ -186,9 +186,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
           "confirmed": $scope.formatedDate(params.date)+ $scope.formatedDate(params.date2)
         }
       ]
-      console.log('exact date', setDateSend);
     } else if ($scope.allowingForDates === true){
-      console.log('vote date');
       setDateSend = [
         {
           "drafts": [
@@ -228,8 +226,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
             "confirmed": params.place
           }
         ],
-        "members": [
-            {
+        "members": {
             "invited": guests,
             "confirmed": [
               {
@@ -239,8 +236,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
                 "chat_success": true
               }
             ]
-          }
-        ],
+          },
         "additional": params.additional
       };
       $postNewEvent.newEvent(paramsSend)
@@ -304,7 +300,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
           "confirmed": params.place
         }
       ],
-      "members": [
+      "members":
           {
           "invited": guests,
           "confirmed": [
@@ -316,7 +312,6 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
             }
           ]
         }
-      ]
     };
     $postNewEvent.newEvent(paramsSend)
       .then(response => {
