@@ -5,7 +5,8 @@ var event = db.Schema({
   date: {type: Object},
   place: { type: Object },
   members: {type: Object},
-  additional: {type: String}
+  additional: {type: String},
+  notification: { type: Object}
 });
 
 module.exports = db.model('Event', event);

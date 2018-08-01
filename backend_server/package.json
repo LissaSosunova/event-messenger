@@ -13,7 +13,7 @@
         "express": "^4.16.3",
         "fs": "0.0.1-security",
         "jwt-simple": "^0.5.1",
-        "mongoose": "^5.1.7",
+        "mongoose": "^5.2.13",
         "morgan": "^1.9.0",
         "node-static": "^0.7.10"
     }

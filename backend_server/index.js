@@ -18,18 +18,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-
+app.route('/sendmes')
+  .post($chat);
 //
-
-//
-// app.route('/chat/:id/')
-//   .get($data.getChatById);
-
-// app.route('/sendmes')
-//   .post($data.postMessege);
-//
-// app.route('/profile')
-//   .post($data.postUserProfile);
+app.route('/profile')
+  .post($user);
 //
 app.route('/event/:id/')
   .get($event);
@@ -55,8 +48,14 @@ app.route('/login')
 app.route('/account')
   .get($account);
 
-app.route('/chat/')
-   .get($chat);  
+app.route('/chat/:id/')
+   .get($chat);
+
+app.route('/new_chat/')
+  .post($chat);
+
+app.route('/change_status/')
+  .post($event);
 
 app.listen(port);
 console.log("Backend server listening on port " + port);

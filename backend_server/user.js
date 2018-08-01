@@ -23,6 +23,17 @@ class UserData {
     this.events = user.events;
     this.chats = user.chats;
     this.avatar = user.avatar;
+    this.notifications = user.notifications;
+  }
+}
+
+class ContactData {
+  constructor(user) {
+    this.id = user.username;
+    this.email = user.email;
+    this.name = user.name;
+    this.avatar = user.avatar;
+    this.private_chat = '0';
   }
 }
 
@@ -48,16 +59,17 @@ router.post('/user', function (req, res, next){
   user.name = "No name";
   user.avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNLzZszQbQf6jkknIGI8A3rj-0BoEngyi9156njfrCjPED9_b2vw";
   user.events = [];
+  user.notifications = [];
+  user.chats = [];
   var password = req.body.password;
 
-  let servicePromise = datareader(User, params);
-  servicePromise
+  datareader(User, params)
     .then((response) =>{
       if (response !== null){
         res.json(dublicate);
       } else {
         bcrypt.hash(password, 10, function(err, hash){
-          if (err) res.json(err)
+          if (err) res.json(err);
           else {
             user.password = hash;
             user.save(err => {
@@ -68,6 +80,9 @@ router.post('/user', function (req, res, next){
         })
       }
     })
+
+
+
 });
 
 
@@ -95,7 +110,7 @@ router.get('/user', function (req, res, next) {
       {email: auth.username}
     ]
   };
-  
+
   let servicePromise = datareader(User, params);
   servicePromise
         .then((response) =>{
@@ -141,11 +156,52 @@ router.post('/adduser', function (req, res, next) {
     })
     if (query.id === auth.username) exsistCont = true;
     if (exsistCont) return res.json({message: "This contact is already exists"});
-      User.updateOne(params, {$push: {contacts: query}}, (e, d) => {
+    datareader(User, {username: query.id})
+      .then(response => {
+        response.private_chat = '0';
+        var contact = new ContactData(response);
+        User.updateOne(params, {$push: {contacts: contact}}, (e, d) => {
           if (e) throw new Error()
           else res.json(d)
-    })
+        })
+      })
   });
-})
+});
+
+router.post('/profile', function (req, res, next){
+  if(!req.headers['authorization']) {
+    return res.sendStatus(401)
+  }
+  try {
+    var auth = jwt.decode(req.headers['authorization'], config.secretkey);
+  } catch (err) {
+    return res.sendStatus(401)
+  }
+  let params = {
+    $or: [
+      {username: auth.username},
+      {email: auth.username}
+    ]
+  };
+  let editedData = req.body;
+  console.log(req.body);
+  datareader(User, params)
+    .then(response =>{
+      console.log(editedData, response.name);
+      if (response.name !== editedData.name){
+        console.log("new name");
+      }
+
+      // User.updateOne({"username" : response.username, "notifications.id" : idNotification},
+      //   {
+      //     $set : { "notifications.$.status" : false }
+      //   }, { upsert: true },
+      //   function(err, result){
+      //   }
+      // );
+      return res.sendStatus(200)
+    })
+
+});
 
 module.exports = router;

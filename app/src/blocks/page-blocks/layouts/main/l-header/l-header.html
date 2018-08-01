@@ -4,10 +4,10 @@
               col-lg-3
           div-row-main-page">
   <button class="contact-list-hider btn-cont">
-    <i class="fa fa-bars" 
+    <i class="fa fa-bars"
             ng-click="main.showHideContacts($event)">
   </i>
-  </button>              
+  </button>
   <div class="col-xs-5
                 col-sm-5
                 col-md-5
@@ -31,7 +31,36 @@
 <div class="col-xs-3
             end-xs
             header-area-blocks">
-  <button class="btn-round-warning" ng-click="main.showHideEventHandler($event)">
-    <i class="fa fa-indent icon-size icon-color" aria-hidden="true" id="bureger"></i>
+  <button class="btn-round-maybe" ng-click="main.showHideEventHandler($event)">
+    <i class="fa fa-indent" aria-hidden="true" id="bureger"></i>
   </button>
+  <button class="btn-round-maybe" ng-click="main.showHideNotifications($event)" id="notifications">
+    <i class="fa fa-bell" aria-hidden="true"></i>
+    <span class="btn-round-maybe-xxs count-number" id="newNotify"> ! </span>
+  </button>
+   <div class="div-notifications-list
+              bg-gray-light
+              non-vis
+              col-xs-12
+              col-sm-12
+              col-md-3
+              col-lg-3"
+       id="notification-list">
+    <ul ng-repeat="item in main.activeNotifications">
+      <li>
+        <span>{{ item.message }}</span>
+        <button class="btn-round-ok-xs">
+          <i class="fa fa-eye icon-color" aria-hidden="true" ng-click="main.openItemState(item.type, item.id, item.status)"></i>
+        </button>
+      </li>
+    </ul>
+    <ul ng-repeat="item in main.archiveNotifications">
+      <li>
+        <span class="bg-dark-50">{{ item.message }}</span>
+        <button class="btn-round-ok-xs">
+          <i class="fa fa-eye icon-color" aria-hidden="true" ng-click="main.openItemState(item.type, item.id)"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
 </div>

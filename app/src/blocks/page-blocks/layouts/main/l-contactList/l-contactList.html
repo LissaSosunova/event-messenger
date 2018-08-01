@@ -4,10 +4,12 @@
             col-lg-12
             bg-gray-dark
             left-sidebar">
-  
+
   <div class="tabs-nav" ng-click="tabsSwitcher($event)">
     <ul>
-      <li class="curr-tab"><a href="#contacts">Contacts</a></li><li><a href="#chats">Chats</a></li><li><a href="#search">Search</a></li>
+      <li class="curr-tab"><a href="#contacts"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Contacts</a></li>
+      <li><a href="#chats"><i class="fa fa fa-comments" aria-hidden="true"></i>&nbsp;Chats</a></li>
+      <li><a href="#search"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;Add</a></li>
     </ul>
   </div>
   <div class="is-vis-tab tab"  id="contacts">
@@ -20,11 +22,11 @@
     <div class="contactList-user"
     ng-repeat="item in main.dataUser.contacts | filter:{name:query}">
       <div class="user-contactList-photo"><img ng-src="{{ item.avatar}}"></div>
-      <div class="user-contactList-name" 
+      <div class="user-contactList-name"
       ng-class="{'current-contact': item.id == main.currID}">{{item.name}}</div>
-      <div class="start-chat fa fa-comments" ng-click="onClickContact(item.id, $event)"></div>
+      <div class="start-chat fa fa-comments" ng-click="startChat(item.private_chat, item.name, item.id, item.email, $event)"></div>
     </div>
-    
+
   </div>
   <div class="tab" id="chats">
     <div>
@@ -32,19 +34,19 @@
         <input class="input-search" ng-model="query" type="text" placeholder="Search contact...">
         <button type="submit" class="btn-round-ok-xs" value=""><div class="icon"><i class="fa fa-search" aria-hidden="true"></i></div></button>
       </form>
-    </div> 
+    </div>
     <div class="chats-list"
     ng-repeat="item in main.userData.chats">
       <div class="user-contactList-photo"><img ng-src="{{ item.avatar}}"></div>
-      <div class="user-contactList-name" 
+      <div class="user-contactList-name"
       ng-click="onClickContact(item.id, $event)"
       ng-class="{'current-contact': item.id == main.currID}">{{item.name}}</div>
     </div>
   </div>
-  <div class="tab" id="search"> 
+  <div class="tab" id="search">
     <form class ="search">
-      <input class="input-search" 
-      type="text" 
+      <input class="input-search"
+      type="text"
       placeholder="Search contact"
       ng-model="search.param"
       ng-change="searchContact(search)">
@@ -55,7 +57,7 @@
       <button class="btn-round-ok col-xs-offset-1" ng-click="addContact($index)"><i class="fa fa-check"></i></button>
     </div>
     <div class="error-message">{{errMes}}</div>
-  </div>   
+  </div>
 </div>
 <div class="col-xs-12
             col-sm-12

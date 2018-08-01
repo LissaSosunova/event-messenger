@@ -3,7 +3,7 @@
 @import "../../../../../sass/functions"
 
 .contactList-user, .chats-list
-    height: 80px
+    height: 60px
     width: 100%
     display: flex
     align-items: center
@@ -11,7 +11,7 @@
         padding-left: 20px
 
     img
-        height: 50px
+        height: 30px
         align-self: center
         @include set-border(0px, 50%)
 
@@ -50,18 +50,15 @@
 .tabs-nav li
     display: inline-block
     cursor: pointer
-    border-bottom: solid white
-    border-right: solid white   
-    border-left: solid white
     width: 65px
-    text-align: center 
+    text-align: center
     font:
-        size: 14px
-        weight: map-get($font-message, 'name-weight')
+        size: 12px
+        weight: 200
         style: map-get($font-message, 'name-style')
 
 .tabs-nav
-    margin: 15px 0
+    margin: 5px 0
 
 .tabs-nav a
     color: black
@@ -76,12 +73,12 @@
 
 
 @media screen and (max-width: 48em)
-    .no-vis-contact-list 
+    .no-vis-contact-list
         left: -100%
         transition: 1s
-      
+
     .is-vis-contact-list
         left: 0
         transition: 1s
         min-width: 250px
-        
+

@@ -39,8 +39,10 @@ app.controller('l-edit-profile', function($scope, $state, $flowDataUser, $transf
     }
 
     $scope.setEditData = function (params) {
+      console.log(params);
       $scope.sendProfile = params => $flowDataProfile.requestProfile(params)
         .then(response => {
+          console.log(response);
             $transferService.setData({name:'profile',data:response});
             let data = response;
           },
