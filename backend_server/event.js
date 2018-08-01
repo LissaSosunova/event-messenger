@@ -66,9 +66,22 @@ router.post('/new_event', function (req, res, next){
           var user = new UserData(response);
           User.update({username: user.username}, {$push: {events:createdEvent}}, (e, d) => {
             if (e) throw new Error();
-            else res.json(d)
-          });
-        });
+            else return response;
+          })
+        })
+        .then((response) =>{
+          if(event.members.invited.length !== 0){
+            event.members.invited.forEach(function (item) {
+              User.update({username: item.username}, {$push: {events:createdEvent}}, (e, d) => {
+                if (e) throw new Error();
+                else return response;
+              });
+            });
+          }
+        })
+        .then((response) => {
+        res.sendStatus(200);
+        })
     }
   })
 });

@@ -4,7 +4,7 @@ var event = db.Schema({
   status: {type: Boolean, required: true},
   date: {type: Object},
   place: { type: Object },
-  members: {type: Array},
+  members: {type: Object},
   additional: {type: String}
 });
 
