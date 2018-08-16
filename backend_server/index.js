@@ -6,6 +6,7 @@ let $user = require('./user');
 let $login = require('./login');
 let $account = require('./account');
 let $event = require('./event');
+let $chat = require('./chat');
 
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -53,6 +54,9 @@ app.route('/login')
 
 app.route('/account')
   .get($account);
+
+app.route('/chat/')
+   .get($chat);  
 
 app.listen(port);
 console.log("Backend server listening on port " + port);

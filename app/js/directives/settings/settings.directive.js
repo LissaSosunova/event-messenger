@@ -6,6 +6,7 @@ app.directive("settings", function ($state) {
     link: function ($scope) {
       $scope.logOut = function(){
         sessionStorage.removeItem('token');
+        sessionStorage.removeItem('id');
         $state.go('login');
       }
     },

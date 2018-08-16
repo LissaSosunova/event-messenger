@@ -3,6 +3,11 @@
   border-radius: $border-radius;
 };
 
+@mixin set-border-mes($border-size, $border-radius1, $border-radius2, $border-radius3, $border-radius4){
+  border: $border-size;
+  border-radius: $border-radius1 $border-radius2 $border-radius3 $border-radius4;
+};
+
 @mixin set-transparent($map, $name, $value){
   background-color: transparentize(map-get($map, $name), $value)
 };

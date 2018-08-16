@@ -12,11 +12,48 @@ body
   padding: 0px
   margin: 0px
 
+.icon-out 
+  clip-path: url("#icon-out")
+  height: 20px
+  width: 20px
+  @include color-light($bg-color, 'gray', 30%)
+  display: inline-block
+  margin-bottom: -31px
+  margin-left: -11px
+
+.icon-in 
+  clip-path: url("#icon-in")
+  height: 20px
+  width: 20px
+  @include color-light($bg-color, 'dark', 60%)
+  display: inline-block
+  margin-bottom: -31px
+  margin-right: -11px
+  
+
+.clip-svg-out, .clip-svg-in  
+  position: fixed;
+
+.out-mes-wrap
+  text-align: right
+
 .div-message-box
   @include color-light($bg-color, 'gray', 30%)
-  margin: 2%
+  margin: 10px
   padding: 15px
-  @include set-border(0px, 20px)
+  max-width: 70%
+
+.outcoming-message
+  display: inline-block
+  @include set-border-mes(0px, 20px, 20px, 0, 20px)
+  text-align: left
+
+.incoming-message
+  display: inline-block
+  @include set-border-mes(0px, 20px, 20px, 20px, 0)
+
+.div-message-box.incoming-message
+  @include color-light($bg-color, 'dark', 60%)
 
 .div-message-box-descr
   padding: 5px
