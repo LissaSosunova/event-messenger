@@ -1,5 +1,5 @@
 app.controller('main.contactList', function($scope, $flowDataChats, $flowDataFindUser,
-$transferService, $state, $flowDataAddUser, $flowDataUser){
+$transferService, $state, $flowDataAddUser, $flowDataUser, $postNewChat){
   let ctrl = this;
   ctrl.$onInit = _init;
 
@@ -10,25 +10,45 @@ $transferService, $state, $flowDataAddUser, $flowDataUser){
     if (idUser != null) refreshChats(idUser);
   }
 
-  $scope.onClickContact = (id, event) => {
-    sessionStorage.setItem('id', id);
-    
-    $scope.main.currID = id;
-    event.stopPropagation();
-    $flowDataChats.getDataChats({id: id})
-      .then(response => {
-        $transferService.setData({name: 'chats', data: response.messages});
-        $transferService.setData({name: 'currID', data: id});
-        $scope.main.chats = response.messages;
-        let chatID = response._id;
-        console.log(response);
-        $state.go('chat', {'id': chatID});
-        $flowDataUser.getDataUser()
+  $scope.startChat = (chat_id, name, id, email, event) => {
+    if(!chat_id || chat_id === '0' || chat_id === 0){
+      let params = {
+        users: [id, $scope.main.dataUser.username],
+        email: [email, $scope.main.dataUser.email]
+      };
+      $postNewChat.new_chat(params)
         .then(response => {
-          $scope.main.userData = response;
+          $transferService.setData({name: 'chats', data: response.messages});
+          $transferService.setData({name: 'currID', data: response.id});
+          $scope.main.chats = response.messages;
+          console.log(response.id);
+          $state.go('chat', {'id': response.id});
+          $flowDataUser.getDataUser()
+            .then(response => {
+              $scope.main.userData = response;
+            });
+        })
+    } else if(chat_id !== '0'){
+      $scope.main.currID = chat_id;
+      event.stopPropagation();
+      console.log(typeof chat_id);
+      $flowDataChats.getDataChats({'id': chat_id})
+        .then(response => {
+          $transferService.setData({name: 'chats', data: response.messages});
+          $transferService.setData({name: 'currID', data: chat_id});
+          $scope.main.chats = response.messages;
+          let chatID = response._id;
+          console.log(response);
+          $state.go('chat', {'id': chat_id});
+          $flowDataUser.getDataUser()
+            .then(response => {
+              $scope.main.userData = response;
+            });
         });
-      });
-    return id;
+      return chat_id;
+    }
+
+
   };
 
   function refreshChats(id) {
@@ -66,7 +86,7 @@ $transferService, $state, $flowDataAddUser, $flowDataUser){
             if(item.username == element.id || item.username == $scope.main.dataUser.username) {
               push = false;
               return
-              } 
+              }
           })
           if (push) return item
         })
@@ -75,7 +95,7 @@ $transferService, $state, $flowDataAddUser, $flowDataUser){
       }, error => {
         $scope.main.querySearch = error;
           $scope.errMes = "Nothing found";
-      }); 
+      });
   }
 
   $scope.addContact = index => {
@@ -87,7 +107,7 @@ $transferService, $state, $flowDataAddUser, $flowDataUser){
     userObj.name = name;
     userObj.avatar = avatar;
     $scope.main.querySearch.splice(index, 1);
-    
+
     $flowDataAddUser.addUser(userObj)
       .then(response => {
         $flowDataUser.getDataUser()
@@ -96,7 +116,7 @@ $transferService, $state, $flowDataAddUser, $flowDataUser){
         });
       })
   }
-   
+
   $scope.$watch('main.userData', newVal => {
       if (!$scope.main.userData) {
         return

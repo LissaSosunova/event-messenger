@@ -37,13 +37,18 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
       }
     }
   });
+  _$data.change_status = $resource(_url + '/change_status/', {},{
+    action:{
+      method: "POST",
+      headers: {
+        'Authorization': $token.getToken
+      }
+    }
+  });
   _$data.profile = $resource(_url + '/profile/',{},{
     action: {
       method: "POST",
       headers: {
-        /**
-         * @return {string}
-         */
         'Authorization': $token.getToken
       }
     }
@@ -85,9 +90,21 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
     }
   });
 
-	_$data.chats = $resource(_url + '/chat/', {id: '@id'}, {
-	  action: {
-	    method: "GET",
+	_$data.chats = $resource(_url + '/chat/:id', {},{
+    action:{
+      method: "GET",
+      params:{
+        data:"@id"
+      },
+      headers: {
+        'Authorization': $token.getToken
+      }
+    }
+  });
+
+  _$data.new_chat = $resource(_url + '/new_chat/',{},{
+    action: {
+      method: "POST",
       headers: {
         'Authorization': $token.getToken
       }
@@ -98,9 +115,6 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
     action:{
       method: "POST",
       headers: {
-        /**
-         * @return {string}
-         */
         'Authorization': $token.getToken
       }
     }

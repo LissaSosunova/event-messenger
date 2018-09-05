@@ -56,7 +56,8 @@ app.config(function($stateProvider, $urlRouterProvider){
             }
           },
           params: {
-            data: {}
+            data: {},
+            id: ''
           }
         })
         .state('new-event', {

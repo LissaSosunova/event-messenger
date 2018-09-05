@@ -1,4 +1,4 @@
-app.controller('l-chat.controller', function($scope, $transferService, $timeout, $postSendMes){
+app.controller('l-chat.controller', function($scope, $transferService, $timeout, $postSendMes, $flowDataChats){
   let ctrl = this;
   ctrl.$onInit = _init;
 
@@ -15,7 +15,7 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     $scope.main.showArrow = false;
     $scope.main.note = document.querySelector('#note');
   }
-  
+
     function idChat () {
     var id = window.location.href.toString().split("/chat/");
     for (let i = 0; i < id.length; i++) {
@@ -68,16 +68,15 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
       $scope.main.chatWrapper.scrollTo(0, $scope.main.contentChatHeight-$scope.main.chatHeightVis);
   }
 
-  $scope.sendMesHandler = (author, id, text) => {
+  $scope.sendMesHandler = (author, usename, text) => {
     let currentTime = new Date();
     let month = currentTime.getMonth() + 1;
     if (!$scope.main.message) return;
-    if(!id) {
-      id = idChat();
-    }
+    var id = idChat();
     let sender = {
-      author: author,
       id: id,
+      author: author,
+      usename: usename,
       text: text,
       date: currentTime.getDate() + '-'+month+'-'+currentTime.getFullYear(),
       time: currentTime.getHours() +':'+ currentTime.getMinutes() +':'+ currentTime.getSeconds()
@@ -106,7 +105,7 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
   $scope.$watch(() => {
     return $transferService.getData('chats')
   }, newVal => {
-    $scope.main.chats = newVal; 
+    $scope.main.chats = newVal;
       $timeout(arrowScrollHandler)
   });
 
