@@ -1,4 +1,4 @@
-app.controller('main', function($scope, $flowDataUser, $transferService, $timeout,) {
+app.controller('main', function($scope, $state, $flowDataUser, $transferService, $timeout,) {
   $scope.main = $scope.main || {};
   $scope.main.eventsForCalendar = [];
   $scope.main.currentEventsArr = [];
@@ -9,10 +9,13 @@ app.controller('main', function($scope, $flowDataUser, $transferService, $timeou
 
   $scope.getUserData = () => $flowDataUser.getDataUser()
     .then(response => {
+      if (response.name === "No name"){
+        $state.go('profile');
+      }
       $scope.main.userData = response;
       $scope.main.eventsAll = response.events;
       $scope.main.userName = response.name;
-      $scope.main.avatar = response.avatar;
+      $scope.main.avatar = response.avatar.link;
       $scope.main.notifications = response.notifications;
 
       $scope.main.eventsAll.forEach(function (item, i) {

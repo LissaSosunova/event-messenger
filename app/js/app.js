@@ -1,1 +1,1 @@
-var app = angular.module('app', ['ui.router', 'ngResource', 'ui.calendar']);
+var app = angular.module('app', ['ui.router', 'ngResource', 'ui.calendar', "flow"]);
