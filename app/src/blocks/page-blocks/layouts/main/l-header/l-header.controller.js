@@ -11,6 +11,7 @@ app.controller('l-header.controller', function($scope, $state, $flowDataEvent, $
     $scope.main.contactList = document.querySelector('.contact-list');
     $scope.main.newNotify = angular.element(document.querySelector('#newNotify'));
     $scope.main.notificationsList = angular.element(document.querySelector('#notification-list'));
+    $scope.main.eventSideBar = document.querySelector('.right-sidebar');
 
   }
   $scope.openProfile = function () {

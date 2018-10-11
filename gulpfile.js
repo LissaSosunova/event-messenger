@@ -27,7 +27,8 @@ let paths = {
       './node_modules/moment/min/moment.min.js',
       './static_vendor/calendar.js',
       './node_modules/fullcalendar/dist/fullcalendar.min.js',
-      './node_modules/fullcalendar/dist/gcal.js'
+      './node_modules/fullcalendar/dist/gcal.js',
+      './node_modules/ng-flow/dist/ng-flow-standalone.js'
     ]
   }
 };

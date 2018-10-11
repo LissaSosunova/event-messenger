@@ -281,3 +281,16 @@ input.btn-confirm
     @include color-light($bg-color, 'green', 30%)
   &:active
     @include color-light($bg-color, 'green', 30%)
+
+
+
+.inputfile + span
+  @extend .btn-save-xs
+  padding-top: 5px
+  display: inline-block
+  @include set-border(0px, 18px)
+  cursor: pointer
+
+.inputfile:focus + span,
+.inputfile + span:hover
+  @include color-light($bg-color, 'green', 30%)

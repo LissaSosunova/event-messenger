@@ -21,14 +21,13 @@ app.controller('l-edit-profile', function($scope, $state, $flowDataUser, $transf
           $scope.profile.userData = response;
           $scope.profile.eventsAll = response.events;
           $scope.profile.userName = response.username;
-          $scope.profile.avatar = response.avatar;
+          $scope.profile.avatar = response.avatar.link;
           $scope.profile.token = response.token;
           $scope.profile.email = response.email;
-          if(response.name !==''){
-            $scope.profile.nickName = response.name;
-          }else {
-            var makeEditable = document.getElementById('nickName').removeAttribute('readonly');
-            var invisbtnedit = document.getElementById('nickBtn').classList.toggle('non-vis');
+          $scope.profile.phone = response.phone;
+          $scope.profile.nickName = response.name;
+          if(response.name === 'No name'){
+            document.getElementById('warning-name').classList.toggle('non-vis');
           }
         },
         error => $scope.errorMessage = error.info.message);
@@ -37,20 +36,39 @@ app.controller('l-edit-profile', function($scope, $state, $flowDataUser, $transf
     $scope.cancelEdit = function () {
       $state.go('main');
     }
+    $scope.imageStrings = [];
+    $scope.processFiles = function(files){
+      angular.forEach(files, function(flowFile, i){
+        var fileReader = new FileReader();
+        // fileReader.onload = function (event) {
+        //   var uri = event.target.result;
+        //   $scope.imageStrings[i] = uri;
+        // };
+        fileReader.readAsDataURL(flowFile.file);
+      });
+    };
+
+    $scope.setNewAvatar = function (image) {
+      console.log(image, $scope.imageStrings);
+      let params = JSON.stringify({avatar: image});
+
+      $flowDataProfile.requestProfile(params)
+        .then(response => {
+            console.log(response);
+          },
+          error => $scope.errorMessage = error.info.message);
+    }
 
     $scope.setEditData = function (params) {
       console.log(params);
-      $scope.sendProfile = params => $flowDataProfile.requestProfile(params)
+      $flowDataProfile.requestProfile(params)
         .then(response => {
-          console.log(response);
-            $transferService.setData({name:'profile',data:response});
-            let data = response;
+            console.log(response);
+            $state.go('main');
           },
           error => $scope.errorMessage = error.info.message);
-      $scope.sendProfile();
-      $state.go('main');
     }
 
-  }
 
+  }
 });

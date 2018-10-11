@@ -9,17 +9,30 @@
   <div class="col-xs-7 padding-box">
     <span class="field-name"> {{ profile.userName }}</span>
   </div>
-  <div class="col-xs-5 end-xs padding-box">
-    <span class="field-name"> Avatar</span>
-  </div>
-  <div class="col-xs-7 padding-box">
-    <img class="profile-avatar" ng-src="{{ profile.avatar }}" alt="avatar">
-  </div>
+  <!--<div class="col-xs-5 end-xs padding-box">-->
+    <!--<span class="field-name"> Avatar</span>-->
+  <!--</div>-->
+  <!--<div class="col-xs-7 padding-box">-->
+    <!--<img class="profile-avatar" ng-src="{{ profile.avatar }}" alt="avatar">-->
+  <!--</div>-->
   <div class="col-xs-5 end-xs padding-box">
     <span class="field-name">Upload new avatar</span></div>
   <div class="col-xs-7 padding-box">
-    <button class="btn-round-ok">
-      <i class="fa fa-upload icon-size icon-color" aria-hidden="true"></i></button>
+    <!--<input type="file" name="file" id="file" class="inputfile btn-save-xs" flow-init-->
+           <!--flow-name="uploader.flow"-->
+           <!--ng-click="processFiles($files)">-->
+    <!--<span for="file">Choose a file</span>-->
+    <div flow-init
+         flow-name="uploader.flow"
+         ng-click="processFiles($files)">
+      <button flow-btn type="file" class="btn-save-xs" id="btnChooseFile"> Choose a file </button>
+      <div ng-repeat="image in uploader.flow.files track by $index" class="div-upload-avatar">
+        <span class="text">Preview new avatar</span><img class="profile-avatar" flow-img="image"/>
+        <button class="btn-round-maybe" ng-click="setNewAvatar(image)">
+          <i class="fa fa-upload" aria-hidden="true"></i></button>
+      </div>
+    </div>
+
   </div>
 </div>
 <div class="profile-spacer"></div>
@@ -31,6 +44,7 @@
     <span class="field-name">Name: </span>
   </div>
   <div class="col-xs-7 padding-box">
+    <span class="profile-warning-mess non-vis" id="warning-name"> You have to set your name before to start use application</span>
     <input type="text"
            class="input-primary"
            id="nickName"
@@ -53,11 +67,13 @@
             col-md-12
             col-lg-12 row middle-xs">
   <div class="col-xs-5 end-xs padding-box">
-    <span class="field-name">Add phone number: </span>
+    <span class="field-name">Phone number: </span>
   </div>
   <div class="col-xs-7 padding-box">
     <input type="tel"
            class="input-primary"
+           placeholder="{{profile.phone}}"
+           ng-value="profile.phone"
            ng-model="params.phone">
   </div>
 </div>
