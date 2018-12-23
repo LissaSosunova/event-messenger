@@ -1,4 +1,4 @@
-app.controller('main', function($scope, $state, $flowDataUser, $transferService, $timeout,) {
+app.controller('main', function($scope, $state, $flowDataUser, $transferService, $timeout, $socket) {
   $scope.main = $scope.main || {};
   $scope.main.eventsForCalendar = [];
   $scope.main.currentEventsArr = [];
@@ -19,13 +19,40 @@ app.controller('main', function($scope, $state, $flowDataUser, $transferService,
       $scope.main.notifications = response.notifications;
 
       $scope.main.eventsAll.forEach(function (item, i) {
-        if($scope.main.eventsAll[i].status === false){
+        if($scope.main.eventsAll[i].status === false) {
           $scope.main.draftEventsArr.push($scope.main.eventsAll[i]);
         }
       });
       $scope.main.eventsAll.forEach(function (item, i) {
         if($scope.main.eventsAll[i].status === true){
-          $scope.main.currentEventsArr.push($scope.main.eventsAll[i]);
+          $scope.main.currentEventsArr.push($scope.main.eventsAll[i])
+        };
+      });
+        $scope.main.userData = response;
+        $scope.main.eventsAll = response.events;
+        $scope.main.userName = response.name;
+        $scope.main.avatar = response.avatar;
+        $socket.sendMesSocket({authorId: $scope.main.userData.username});
+        console.log($scope.main);
+        $scope.main.eventsAll.forEach((item, i) => {
+          if($scope.main.eventsAll[i].status === false){
+            $scope.main.draftEventsArr.push($scope.main.eventsAll[i]);
+          }
+        });
+        $scope.main.eventsAll.forEach((item, i) => {
+          if($scope.main.eventsAll[i].status === true){
+            $scope.main.currentEventsArr.push($scope.main.eventsAll[i]);
+          }
+        });
+        $scope.model = {
+          currentEvents: {
+            title: 'Current events',
+            data: $scope.main.currentEventsArr
+          },
+          draftEvents: {
+            title: 'Draft events',
+            data: $scope.main.draftEventsArr
+          }
         }
       });
       $scope.model = {
@@ -40,7 +67,7 @@ app.controller('main', function($scope, $state, $flowDataUser, $transferService,
       };
 
       $scope.main.notificationsCount = '!';
-      if($scope.main.notifications.length !==0){
+      if($scope.main.notifications && $scope.main.notifications.length !==0){
         $scope.main.notifications.forEach(function (item) {
           if(item.status === true){
             $scope.main.activeNotifications.push(item);
@@ -78,8 +105,5 @@ app.controller('main', function($scope, $state, $flowDataUser, $transferService,
       $scope.main.contactListHandler = event => {
         event.stopPropagation();
       }
-    })
   $scope.getUserData();
-});
-
-
+    });

@@ -4,7 +4,7 @@
   "description": "Event messenger",
   "main": "index.js",
   "scripts": {
-    "server": "node server/index.js",
+    "server": "node ./server/index.js",
     "mock": "node ./mock/index.js",
     "backend": "node ./backend_server/index.js"
   },
@@ -19,12 +19,12 @@
   },
   "homepage": "https://github.com/LissaSosunova/event-messenger#readme",
   "devDependencies": {
-    "angular": "^1.7.0",
-    "angular-resource": "^1.7.0",
+    "angular": "^1.7.3",
+    "angular-resource": "^1.7.3",
     "angular-ui-calendar": "^1.0.2",
     "angular-ui-router": "^0.4.3",
-    "browser-sync": "^2.22.0",
-    "eslint": "^4.12.0",
+    "browser-sync": "^2.24.6",
+    "eslint": "^4.19.1",
     "express": "^4.16.3",
     "fullcalendar": "^3.9.0",
     "gulp": "^3.9.1",
@@ -32,11 +32,13 @@
     "gulp-sass": "^3.2.1",
     "gulp-sourcemaps": "^2.6.4",
     "jquery": "^3.3.1",
-    "moment": "^2.21.0",
+    "moment": "^2.22.2",
     "node-static": "^0.7.10",
     "rimraf": "^2.6.2",
-    "ws": "^3.3.2",
-    "ng-flow": "^2.1.4"
+    "ng-flow": "^2.1.4",
+    "stompjs": "^2.3.3",
+    "webstomp-client": "^1.2.0",
+    "ws": "^3.3.3"
   },
   "dependencies": {
     "bootstrap": "^4.0.0",

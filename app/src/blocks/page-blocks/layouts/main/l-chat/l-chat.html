@@ -27,28 +27,28 @@
                 col-md-12
                 col-lg-12">
       <div ng-repeat="item in main.chats">
-        <div class="in-mes-wrap"  ng-if="main.currID == item.id" > 
+        <div class="in-mes-wrap"  ng-if="main.currID == item.authorId" > 
           <div class="icon-in"></div><div class="div-message-box incoming-message">
             <span class="txt-description">{{item.date}}; </span>
             <span class="txt-description">{{item.time}} </span>
 
-            <span class="message-name">{{item.author}}:</span>
+            <span class="message-name">{{main.currName}}:</span>
             <p class="message-text">{{item.text}}</p>
           </div>
         </div>
 
-        <div class="out-mes-wrap" ng-hide="main.currID == item.id">          
+        <div class="out-mes-wrap" ng-hide="main.currID == item.authorId">          
           <div class="div-message-box outcoming-message">
             <span class="txt-description">{{item.date}}; </span>
             <span class="txt-description">{{item.time}} </span>
           
-            <span class="message-name">{{item.author}}:</span>
+            <span class="message-name">{{main.userName}}:</span>
             <p class="message-text">{{item.text}}</p>
           </div><div class="icon-out"></div>
         </div>
       </div>
-      <div class="div-message-box-descr non-vis bg-gray-dark col-xs-12" id="note">
-        <span class="txt-description">{{main.userName}} is typing...</span>
+      <div class="div-message-box-descr bg-gray-dark col-xs-12" id="note" ng-if="notify">
+        <span class="txt-description">{{main.currName}} is typing...</span>
       </div>
     </div>
   </div>
@@ -68,13 +68,13 @@
        data-binding 
        data-text="Write a message"
        ng-keypress="sendMesEnter($event)" 
-       ng-focus="showNote()" 
-       ng-blur="showNote()"></div>       
+       ng-focus="showNote(main.currID)" 
+       ng-blur="hideNote(main.currID)"></div>       
   </div>
   <div class="footer-buttons">
     <button class="btn-round-ok"
               type="send"
-              ng-click="sendMesHandler(main.userName, main.currID, main.message)">
+              ng-click="sendMesHandler(main.dataUser.username, main.currID, main.message)">
       <i class="fa fa-paper-plane" aria-hidden="true"></i>
     </button>
   </div>

@@ -1,20 +1,19 @@
-var router = require('express').Router() // импортируем роутер
+const router = require('express').Router() // импортируем роутер
 
 // импортируем модуль bcrypt для шифрования паролей (мы же не собираемся хранить их в БД в открытом виде?)
-var bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 // плагин для аватрок
-var multer = require('multer');
+const multer = require('multer');
 // импортируем JWT для декодирования web-token'ов
-var jwt = require('jwt-simple');
+const jwt = require('jwt-simple');
 // импортируем модель пользователя и евента
-var User = require('./models/user');
-var Event = require('./models/event');
-var Avatar = require('./models/avatar');
-var datareader = require('./datareader');
-var datareaderById = require('./datareaderbyid');
+const User = require('./models/user');
+const Event = require('./models/event');
+const Avatar = require('./models/avatar');
+const datareader = require('./datareader');
 
 // импортируем файл конфигурации (баловство, конечно, надо генерировать это на лету и хранить где-нибудь)
-var config = require('./config');
+const config = require('./config');
 
 class SetAvatar {
   constructor(avatar) {
@@ -53,20 +52,20 @@ class ContactData {
  */
 router.post('/user', function (req, res, next){
 
-  let params = {
+  const params = {
     $or: [
       {username: req.body.username},
       {email: req.body.email}
     ]
   };
-  let dublicate = {
+  const dublicate = {
     name: 'MongoError'
   };
-  let defaultAvatar = {
+  const defaultAvatar = {
       owner: 'default'
   };
-  var avatar;
-  datareader(Avatar, defaultAvatar)
+  let avatar;
+  datareader(Avatar, defaultAvatar, 'findOne')
     .then((response) => {
       if(response){
         avatar = response;
@@ -75,7 +74,7 @@ router.post('/user', function (req, res, next){
     })
     .then((avatar) =>{
     console.log(avatar);
-      var user = new User;
+      const user = new User;
       user.username = req.body.username;
       user.email = req.body.email;
       user.name = "No name";
@@ -84,9 +83,9 @@ router.post('/user', function (req, res, next){
       user.events = [];
       user.notifications = [];
       user.chats = [];
-      var password = req.body.password;
+      const password = req.body.password;
       console.log(user);
-      datareader(User, params)
+      datareader(User, params, 'findOne')
         .then((response) =>{
           if (response !== null){
             res.json(dublicate);
@@ -117,22 +116,23 @@ router.post('/user', function (req, res, next){
 
 
 router.get('/user', function (req, res, next) {
+  let auth;
     if(!req.headers['authorization']) {
     return res.sendStatus(401)
   }
   try {
-    var auth = jwt.decode(req.headers['authorization'], config.secretkey);
+    auth = jwt.decode(req.headers['authorization'], config.secretkey);
   } catch (err) {
     return res.sendStatus(401)
   }
-  let params = {
+  const params = {
     $or: [
       {username: auth.username},
       {email: auth.username}
     ]
   };
 
-  let servicePromise = datareader(User, params);
+  const servicePromise = datareader(User, params, 'findOne');
   servicePromise
         .then((response) =>{
         var user = new UserData(response);
@@ -140,72 +140,107 @@ router.get('/user', function (req, res, next) {
         })
 });
 
-router.post('/finduser', function (req, res, next) {
-  let query = req.body.param;
+router.post('/finduser', async function (req, res, next) {
+  const query = req.body.param;
+  const queryParam = {
+    $or:[{username: {$regex: query}}, {email: {$regex: query}}]
+  }
   if (query != "") {
-    User.find({$or:[{username: {$regex: query}}, {email: {$regex: query}}]},  (e, d) => {
-      if (e) throw new Error()
-      else res.json(d)
-    })
+    try {
+      const result = await datareader(User, queryParam, 'find');
+      res.json(result);
+    } catch (err) {
+      throw new Error(err);
+    }
+    
+    // User.find({$or:[{username: {$regex: query}}, {email: {$regex: query}}]},  (e, d) => {
+    //   if (e) throw new Error()
+    //   else res.json(d)
+    // })
   }
   else {
-    res.end()
+    res.end();
   }
 })
 
-router.post('/adduser', function (req, res, next) {
-  let exsistCont = false;
-  let query = req.body;
+router.post('/adduser', async function (req, res, next) {
+  let auth;
+  const exsistCont = false;
+  const query = req.body;
   try {
-    var auth = jwt.decode(req.headers['authorization'], config.secretkey);
+    auth = jwt.decode(req.headers['authorization'], config.secretkey);
   } catch (err) {
     return res.sendStatus(401)
   }
-  let params = {
+  const params = {
     $or: [
       {username: auth.username},
       {email: auth.username}
     ]
   };
-  datareader(User, params)
-  .then(response => {
-    response.contacts.forEach(item => {
+  try {
+    const result = await datareader(User, params, 'findOne');
+    result.contacts.forEach(item => {
       if (query.id === auth.username || item.id === query.id ) {
         exsistCont = true;
-        return
         }
-    })
+    });
     if (query.id === auth.username) exsistCont = true;
     if (exsistCont) return res.json({message: "This contact is already exists"});
-    datareader(User, {username: query.id})
-      .then(response => {
-        response.private_chat = '0';
-        var contact = new ContactData(response);
-        User.updateOne(params, {$push: {contacts: contact}}, (e, d) => {
-          if (e) throw new Error()
-          else res.json(d)
-        })
-      })
-  });
+  
+    const findRes = await datareader(User, {username: query.id}, 'findOne');
+    findRes.private_chat = '0';
+    const contact = new ContactData(findRes);
+    const updateParams = {
+      query: params,
+      objNew:  {$push: {contacts: contact}}
+    };
+    const updateRes = await datareader(User, updateParams, 'updateOne');
+    res.json(updateRes);
+  } catch(err) {
+    throw new Error(err);
+  }
+  
+  // datareader(User, params, 'findOne');
+  // .then(response => {
+  //   response.contacts.forEach(item => {
+  //     if (query.id === auth.username || item.id === query.id ) {
+  //       exsistCont = true;
+  //       return
+  //       }
+  //   })
+  //   if (query.id === auth.username) exsistCont = true;
+  //   if (exsistCont) return res.json({message: "This contact is already exists"});
+  //   datareader(User, {username: query.id}, 'findOne')
+  //     .then(response => {
+  //       response.private_chat = '0';
+  //       const contact = new ContactData(response);
+  //       User.updateOne(params, {$push: {contacts: contact}}, (e, d) => {
+  //         if (e) throw new Error()
+  //         else res.json(d)
+  //       })
+  //     })
+  // });
 });
 
 router.post('/profile', function (req, res, next){
+  let auth;
   if(!req.headers['authorization']) {
     return res.sendStatus(401)
   }
   try {
-    var auth = jwt.decode(req.headers['authorization'], config.secretkey);
+    auth = jwt.decode(req.headers['authorization'], config.secretkey);
   } catch (err) {
     return res.sendStatus(401)
   }
-  let params = {
+  const params = {
     $or: [
       {username: auth.username},
       {email: auth.username}
     ]
   };
-  let editedData = req.body;
-  datareader(User, params)
+  const editedData = req.body;
+  datareader(User, params, 'findOne')
     .then(response =>{
       if (editedData.phone && response.phone !== editedData.phone){
         User.updateOne({"username" : response.username},
@@ -240,7 +275,7 @@ router.post('/profile', function (req, res, next){
     })
     .then(response =>{
       if (editedData.avatar){
-        let avatar = new Avatar(editedData.avatar);
+        const avatar = new Avatar(editedData.avatar);
         User.updateOne({"username" : response.username},
           {
             $set : { "avatar" : avatar }

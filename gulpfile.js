@@ -9,6 +9,7 @@ let paths = {
   mock: 'server/constants/app.default.mock.js',
   server: 'server/constants/app.default.server.js',
   localServer: 'server/constants/app.default.localserver.js',
+  webSocket: 'server/constants/app.default.webSocket.js',
   sass: {
     blocks: 'app/src/blocks/**/*.sass',
     common: 'app/src/sass/**/*.sass',
@@ -34,14 +35,17 @@ let paths = {
 };
 //compile js for mock 5006
 gulp.task('js', function() {
-  return gulp.src(
-    paths.js)
+  return gulp.src([
+    paths.js,
+    paths.webSocket,
+    paths.mock])
     .pipe(concat('main.js'))
     .pipe(gulp.dest('./bin/js'));
 });
 gulp.task('js.mock', function() {
   return gulp.src([
     paths.js,
+    paths.webSocket,
     paths.mock])
     .pipe(concat('main.js'))
     .pipe(gulp.dest('./bin/js'));
@@ -58,6 +62,7 @@ gulp.task('server', function() {
 gulp.task('localServer', function() {
   return gulp.src([
     paths.js,
+    paths.webSocket,
     paths.localServer])
     .pipe(concat('main.js'))
     .pipe(gulp.dest('./bin/js'));
@@ -65,8 +70,8 @@ gulp.task('localServer', function() {
 
 gulp.task('css:libs', function(){
   return gulp.src(paths.css.libs)
-    .pipe(concat('libs.css'))
-    .pipe(gulp.dest('./bin/css'))
+  .pipe(concat('libs.css'))
+  .pipe(gulp.dest('./bin/css'))
 });
 
 gulp.task('sass', function () {
@@ -84,19 +89,18 @@ gulp.task('clean', function del(cb) {
   return rimraf('bin', cb);
 });
 
-gulp.task('watch',['js.mock', 'sass', 'css:libs'], function () {
-  gulp.watch(paths.js, ['js.mock']),
+gulp.task('watch',['js', 'sass', 'css:libs'], function () {
+    gulp.watch([paths.js, paths.webSocket], ['js']),
     gulp.watch([paths.sass.common, paths.sass.blocks], ['sass']),
     gulp.watch(paths.css.libs, ['css:libs'])
 });
 gulp.task('watch:server',['server', 'sass', 'css:libs'], function () {
-  gulp.watch(paths.js, ['server']),
+    gulp.watch(paths.js, ['server']),
     gulp.watch([paths.sass.common, paths.sass.blocks], ['sass'])
 });
 gulp.task('watch:localServer',['localServer', 'sass', 'css:libs'], function () {
-  gulp.watch(paths.js, ['localServer']),
-    gulp.watch([paths.sass.common, paths.sass.blocks], ['sass']),
-    gulp.watch(paths.css.libs, ['css:libs'])
+    gulp.watch([paths.js, paths.webSocket], ['localServer']),
+    gulp.watch([paths.sass.common, paths.sass.blocks], ['sass'])
 });
 
 gulp.task('sass:templates', function () {
@@ -117,4 +121,3 @@ gulp.task('bundle:js', function() {
 
 gulp.task('build:local', ['localServer', 'sass', 'css:libs', 'bundle:js']);
 gulp.task('build:server', ['server', 'sass', 'css:libs', 'bundle:js']);
-gulp.task('build:mock', ['js.mock', 'sass', 'css:libs', 'bundle:js']);

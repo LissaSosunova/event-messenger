@@ -1,4 +1,4 @@
-var db = require('./db');
+const db = require('./db');
 
 // var avatar = db.Schema({
 //   id: {type: String},
@@ -6,25 +6,25 @@ var db = require('./db');
 //   link: { type: String }
 // });
 
-var contact = db.Schema({
+const contact = db.Schema({
   id: { type: String },
   name: { type: String },
   avatar: { type: Object },
   private_chat: { type: String },
   email: { type: String }
 });
-var eventNotification = db.Schema({
+const eventNotification = db.Schema({
   id: { type: String },
   type: { type: String },
   message: { type: String }
 });
-var chat = db.Schema({
+const chat = db.Schema({
   id: { type: String },
   name: { type: String },
   avatar: { type: Object }
 });
 
-var event = db.Schema({
+const event = db.Schema({
   id: { type: String },
   name: { type: String },
   status: { type: Boolean },
@@ -32,14 +32,14 @@ var event = db.Schema({
   notification: { eventNotification }
 });
 
-var notification = db.Schema({
+const notification = db.Schema({
   id: { type: String },
   type: { type: String },
   message: { type: String },
   status: { type: Boolean}
 });
 
-var user = db.Schema({
+const user = db.Schema({
     username: {type: String, required: true},
     email: {type: String, required: true},
     password: {type: String, required: true, select: false},

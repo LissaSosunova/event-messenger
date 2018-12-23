@@ -7,12 +7,30 @@
 
   <div class="tabs-nav" ng-click="tabsSwitcher($event)">
     <ul>
-      <li class="curr-tab"><a href="#contacts"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Contacts</a></li>
-      <li><a href="#chats"><i class="fa fa fa-comments" aria-hidden="true"></i>&nbsp;Chats</a></li>
+      <li class="curr-tab"><a href="#chats"><i class="fa fa fa-comments" aria-hidden="true"></i>&nbsp;Chats</a></li>
+      <li><a href="#contacts"><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Contacts</a></li>
       <li><a href="#search"><i class="fa fa-user-plus" aria-hidden="true"></i>&nbsp;Add</a></li>
     </ul>
   </div>
-  <div class="is-vis-tab tab"  id="contacts">
+
+  <div class="is-vis-tab tab" id="chats">
+    <div>
+      <form class ="search">
+        <input class="input-search" ng-model="query" type="text" placeholder="Search contact...">
+        <button type="submit" class="btn-round-ok-xs" value=""><div class="icon"><i class="fa fa-search" aria-hidden="true"></i></div></button>
+      </form>
+    </div> 
+    <div class="chats-list"
+    ng-repeat="item in main.userData.chats">
+      <div class="user-contactList-photo"><img ng-src="{{ item.avatar}}"></div>
+      <div class="user-contactList-name" 
+      ng-click="onClickContact(item.id, item.name, $event)"
+      ng-class="{'current-contact': item.id == main.currID}">{{item.name}}</div>
+      <div class="btn-round-maybe-xxs mes-notify" ng-if="main.newMesNotify"> ! </div>
+    </div>
+  </div>
+
+  <div class="tab" id="contacts">
     <div>
       <form class ="search">
         <input class="input-search" ng-model="query" type="text" placeholder="Search contact...">
@@ -22,25 +40,9 @@
     <div class="contactList-user"
     ng-repeat="item in main.dataUser.contacts | filter:{name:query}">
       <div class="user-contactList-photo"><img ng-src="{{ item.avatar}}"></div>
-      <div class="user-contactList-name"
+      <div class="user-contactList-name" 
       ng-class="{'current-contact': item.id == main.currID}">{{item.name}}</div>
-      <div class="start-chat fa fa-comments" ng-click="startChat(item.private_chat, item.name, item.id, item.email, $event)"></div>
-    </div>
-
-  </div>
-  <div class="tab" id="chats">
-    <div>
-      <form class ="search">
-        <input class="input-search" ng-model="query" type="text" placeholder="Search contact...">
-        <button type="submit" class="btn-round-ok-xs" value=""><div class="icon"><i class="fa fa-search" aria-hidden="true"></i></div></button>
-      </form>
-    </div>
-    <div class="chats-list"
-    ng-repeat="item in main.userData.chats">
-      <div class="user-contactList-photo"><img ng-src="{{ item.avatar}}"></div>
-      <div class="user-contactList-name"
-      ng-click="onClickContact(item.id, $event)"
-      ng-class="{'current-contact': item.id == main.currID}">{{item.name}}</div>
+      <div class="start-chat fa fa-comments" ng-click="onClickContact(item.id, item.name, $event)"></div>
     </div>
   </div>
   <div class="tab" id="search">
@@ -63,5 +65,5 @@
             col-sm-12
             col-md-12
             col-lg-12">
-    <div data-settings="" data-model="main.settings"></div>
+    <div data-settings="main" data-model="main.settings"></div>
 </div>

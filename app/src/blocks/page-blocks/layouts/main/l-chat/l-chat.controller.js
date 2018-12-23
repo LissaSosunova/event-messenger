@@ -1,7 +1,6 @@
-app.controller('l-chat.controller', function($scope, $transferService, $timeout, $postSendMes, $flowDataChats){
+app.controller('l-chat.controller', function($scope, $transferService, $timeout, $postSendMes, $flowDataChats, $socket){
   let ctrl = this;
   ctrl.$onInit = _init;
-
   function _init () {
     $scope.main = $scope.main || {};
     $scope.main.inputMes = document.querySelector('.text-block');
@@ -14,15 +13,34 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     $scope.main.hiddenDiv = document.querySelector('.hiddenDiv');
     $scope.main.showArrow = false;
     $scope.main.note = document.querySelector('#note');
+    $scope.notify = false;
+    const socket = $socket.socket();
+    socket.onmessage = function (event) {
+      let incomingMessage = event.data;
+      let newMes = JSON.parse(incomingMessage);
+      if (newMes.read) {
+        $scope.main.chats.unshift(newMes);
+        $scope.main.chatWrapper.scrollTo(0, $scope.main.chatBox.clientHeight-$scope.main.chatHeightVis);
+      }
+    } 
   }
 
     function idChat () {
-    var id = window.location.href.toString().split("/chat/");
+    const id = window.location.href.toString().split("/chat/");
     for (let i = 0; i < id.length; i++) {
       return id[1];
     }
   };
-
+  sessionStorage.setItem('idChat', idChat());
+  $timeout(() => {
+    let chatIdObj = {};
+    chatIdObj.prev = sessionStorage.getItem('idChat');
+    chatIdObj.curr = idChat();
+    chatIdObj.destination = $scope.main.currID;
+    $transferService.setData({name: 'chatIdPrev', data: chatIdObj.curr});
+    $socket.sendSocket(chatIdObj);
+  });
+  
   function scrollHandler () {
     $scope.main.contentChatHeight = $scope.main.chatBox.clientHeight;
     $transferService.setData({name: 'currScroll', data: $scope.main.contentChatHeight-$scope.main.chatHeightVis});
@@ -67,24 +85,27 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
         };
       $scope.main.chatWrapper.scrollTo(0, $scope.main.contentChatHeight-$scope.main.chatHeightVis);
   }
-
-  $scope.sendMesHandler = (author, usename, text) => {
+  
+  $scope.sendMesHandler = (authorUsername, username, text) => {
     let currentTime = new Date();
     let month = currentTime.getMonth() + 1;
     if (!$scope.main.message) return;
-    var id = idChat();
+    let chatID = idChat();
     let sender = {
-      id: id,
-      author: author,
-      usename: usename,
+      chatID: chatID,
+      authorId: authorUsername,
+      destination: username,
       text: text,
+      edited: false,
+      read: false,
       date: currentTime.getDate() + '-'+month+'-'+currentTime.getFullYear(),
       time: currentTime.getHours() +':'+ currentTime.getMinutes() +':'+ currentTime.getSeconds()
     };
-    $postSendMes.sendMes(sender)
-      .then(response => {
-        $scope.main.chats = response.messages;
-      });
+    console.log(sender);
+    
+    $socket.sendMesSocket(sender);
+    $scope.main.chats.unshift(sender);
+
     $scope.main.inputMes.value = "";
     $scope.main.message = "";
 
@@ -98,10 +119,16 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
   $scope.sendMesEnter = event => {
     if (event.shiftKey && event.charCode == 13) return;
     else if (event.charCode == 13) {
-      $scope.sendMesHandler($scope.main.userName, $scope.main.currID, $scope.main.message);
-      event.preventDefault();
+      event.preventDefault(); 
+      $scope.sendMesHandler($scope.main.dataUser.username, $scope.main.currID, $scope.main.message);
     }
   }
+  $scope.$watch(()=> {
+    return $transferService.getData('currName');
+  }, newVal => {
+    if (!newVal) return;
+    $scope.main.currName = newVal;
+  })
   $scope.$watch(() => {
     return $transferService.getData('chats')
   }, newVal => {
@@ -110,8 +137,14 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
   });
 
   let note = document.querySelector('#note');
-  $scope.showNote = () => {
-    note.classList.toggle('non-vis');
+  $scope.showNote = username => {
+    //$socket.sendMesSocket({notification: true, destination: username});
+    console.log('showNote');
+    //note.classList.toggle('non-vis');
+  }
+  $scope.hideNote = username => {
+    //$socket.sendMesSocket({notification: false, destination: username});
+    console.log('hideNote');
   }
   $scope.$watch(()=> {
     return $transferService.getData('currID')},
@@ -125,6 +158,20 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     $scope.main.footer.clientHeight;
     $scope.main.chatWrapper.style.height = $scope.main.chatHeightVis+"px";
     $scope.main.chatWrapper.scrollTo(0, $scope.main.contentChatHeight-$scope.main.chatHeightVis);
-    $scope.main.note.style.bottom = $scope.main.footer.clientHeight + "px";
+    // $scope.main.note.style.bottom = $scope.main.footer.clientHeight + "px";
+  })
+  $scope.$watch(()=> {
+    return $transferService.getData('incomingMessage')
+  }, newVal => {
+    if (!newVal) return;
+    console.log('new message',newVal);
+    $scope.main.chats.unshift(newVal);
+    $timeout(arrowScrollHandler);
+  })
+  $scope.$watch (()=> {
+    return $transferService.getData('notify')
+  }, newVal => {
+    $scope.notify = newVal;
+    console.log('$scope.notify', $scope.notify);
   })
 });

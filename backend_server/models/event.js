@@ -1,5 +1,5 @@
-var db = require('./db')
-var event = db.Schema({
+const db = require('./db')
+const event = db.Schema({
   name: {type: String, required: true},
   status: {type: Boolean, required: true},
   date: {type: Object},
