@@ -8,6 +8,7 @@ app.controller('calendar.controller', function($scope, $compile, $timeout, uiCal
   let chatIdObj = {};
   chatIdObj.prev = $transferService.getData('chatIdPrev');
   chatIdObj.curr = undefined;
+  chatIdObj.token = sessionStorage.getItem('token');
   $socket.sendSocket(chatIdObj);
 
   $scope.events = $transferService.getData('eventsForCalendar'); 

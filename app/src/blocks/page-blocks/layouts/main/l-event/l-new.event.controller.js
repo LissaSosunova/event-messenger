@@ -5,6 +5,7 @@ app.controller('l-new.event', function($scope, $postNewEvent, $state, $transferS
     let chatIdObj = {};
     chatIdObj.prev = $transferService.getData('chatIdPrev');
     chatIdObj.curr = undefined;
+    chatIdObj.token = sessionStorage.getItem('token');
     $socket.sendSocket(chatIdObj);
     $scope.dateVote = angular.element(document.querySelector('#dateVote'));
     $scope.placeVote = angular.element(document.querySelector('#placeVote'));

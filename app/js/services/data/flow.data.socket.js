@@ -1,4 +1,4 @@
-app.service('$socket', function($getSocket, $window, $transferService){
+app.service('$socket', function($getSocket, $transferService){
 
     let socket = new WebSocket($getSocket.getURI());
     this.sendMesSocket = function (sender){
