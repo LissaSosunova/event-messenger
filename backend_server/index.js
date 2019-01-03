@@ -40,6 +40,12 @@ app.route('/finduser')
 app.route('/adduser')
   .post($user);
 
+app.route('/deleteContact')
+  .post($user);  
+
+app.route('/deleteChat')
+  .post($chat);
+  
 app.route('/login')
   .post($login);
 

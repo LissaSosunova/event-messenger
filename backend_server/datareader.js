@@ -12,8 +12,20 @@ function dbQuery (collection, params, action) {
         else resolve(d);
       })
     }
+    else if (action === 'update') {
+      collection.updateOne(params.query, params.objNew, params.multi,  (e, d) => {
+        if (e) reject(e);
+        else resolve(d);
+      })
+    }
     else if (action === 'find') {
       collection.find(params,  (e, d) => {
+        if (e) reject(e);
+        else resolve(d);
+      })
+    }
+    else if (action === 'findExField') {
+      collection.find(params.query1, params.query2,  (e, d) => {
         if (e) reject(e);
         else resolve(d);
       })

@@ -31,6 +31,9 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
       return id[1];
     }
   };
+  $timeout(()=>{
+    sessionStorage.setItem('idChat', idChat());
+  });
   sessionStorage.setItem('idChat', idChat());
   $scope.$watch('main.userData', newVal => {
     if (!newVal) {

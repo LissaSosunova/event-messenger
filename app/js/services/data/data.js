@@ -29,6 +29,23 @@ app.factory('$data', ['$resource', '$defaultService', '$token', function ($resou
       }
     }
   });
+  _$data.deleteContact = $resource(_url + '/deleteContact/', {},{
+    action:{
+      method: "POST",
+      isArray: true,
+      headers: {
+     'Authorization': $token.getToken
+      }
+    }
+  });
+  _$data.deleteChat = $resource(_url + '/deleteChat/', {},{
+    action:{
+      method: "POST",
+      headers: {
+     'Authorization': $token.getToken
+      }
+    }
+  });
   _$data.addUser = $resource(_url + '/adduser/', {},{
     action:{
       method: "POST",

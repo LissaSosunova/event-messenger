@@ -37,6 +37,9 @@ function runWebsocketServer() {
             read?: string[]; надо будет поменять на масив строк, сейчас boolean
             date?: string;
             time:? string;
+            isDeleted: {
+              [id: string]: boolean
+            }
           }
           */
           const sender = JSON.parse(message);
@@ -85,6 +88,9 @@ function runWebsocketServer() {
             //   return;
             // }
             sender.read = true;
+            sender.isDeleted = {};
+            sender.isDeleted[sender.destination] = false;
+            sender.isDeleted[sender.authorId] = false;
             const updateParams = {
               query: {$and:[{users: userId}, {users: sender.destination}]},
               objNew: {$push: {messages: {$each: [sender], $position: 0}}}
@@ -96,7 +102,7 @@ function runWebsocketServer() {
             .catch(err => {
               throw new Error(err);
             });
-            console.log(`Отправленное сообщение ${sender}`);
+            console.log('Отправленное сообщение', sender);
             sendMes = JSON.stringify(sender);
 
            Object.keys(clients[chatIdCurr][sender.destination]).forEach(item => {
@@ -104,12 +110,15 @@ function runWebsocketServer() {
            })
             }
           else if (sender.text) {
-            console.log('message', sender);
             sender.read = false;
+            sender.isDeleted = {};
+            sender.isDeleted[sender.destination] = false;
+            sender.isDeleted[sender.authorId] = false;
             const updateParams = {
               query: {$and:[{users: userId}, {users: sender.destination}]},
               objNew: {$push: {messages: {$each: [sender], $position: 0}}}
-            }
+            };
+            console.log('Отправленное сообщение', sender);
             datareader(Chat, updateParams, 'updateOne')
             .then(res => {
               console.log('chats update', res);

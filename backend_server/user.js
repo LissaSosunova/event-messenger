@@ -197,6 +197,32 @@ router.post('/adduser', async function (req, res, next) {
   }
 });
 
+router.post('/deleteContact', async function (req, res, next) {
+  let auth;
+  if(!req.headers['authorization']) {
+    return res.sendStatus(401)
+  }
+  try {
+    auth = jwt.decode(req.headers['authorization'], config.secretkey);
+  } catch (err) {
+    return res.sendStatus(401)
+  }
+  
+  const dataObj = req.body;
+  const params = {
+    query: {username: dataObj.username},
+    objNew: {$pull: {contacts: {id: dataObj.contactUsername}}}
+  }
+  try {
+    const updateRes = await datareader(User, params, 'updateOne');
+    console.log('updateRes', updateRes);
+    res.end();
+  } catch (err) {
+    throw new Error(err);
+  }
+
+})
+
 router.post('/profile', function (req, res, next){
   let auth;
   if(!req.headers['authorization']) {
@@ -244,6 +270,15 @@ router.post('/profile', function (req, res, next){
           function(err, result){
           }
         );
+
+        User.updateMany({"chats.id": response.username},
+          {
+            $set : { "chats.$.name" : editedData.name }
+          }, { upsert: true },
+          function(err, result){
+          }
+        );
+
         return response;
       }
     })

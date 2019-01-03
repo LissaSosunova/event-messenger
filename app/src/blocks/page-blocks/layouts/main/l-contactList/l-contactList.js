@@ -1,5 +1,5 @@
 app.controller('main.contactList', function($scope, $flowDataChats, $flowDataFindUser,
-$transferService, $state, $flowDataAddUser, $flowDataUser, $postNewChat){
+$transferService, $state, $flowDataAddUser, $flowDataUser, $flowDataDeleteContact, $flowDataDeleteChat){
   let ctrl = this;
   ctrl.$onInit = _init;
   
@@ -20,7 +20,7 @@ $transferService, $state, $flowDataAddUser, $flowDataUser, $postNewChat){
     sessionStorage.setItem('currname', name);
     $transferService.setData({name: 'currName', data: name});
     event.stopPropagation();
-    $flowDataChats.getDataChats({id: id})
+    $flowDataChats.getDataChats({id: id, myId: $scope.main.userData.username})
       .then(response => {
         $transferService.setData({name: 'chats', data: response.messages});
         $transferService.setData({name: 'currID', data: id});
@@ -36,6 +36,31 @@ $transferService, $state, $flowDataAddUser, $flowDataUser, $postNewChat){
   })
 }
 
+$scope.deleteContact = (index, event, user) => {
+  event.stopPropagation();
+  const contactObj = {
+    contactUsername: user.id,
+    username: $scope.main.userData.username
+  }
+  $flowDataDeleteContact.deleteContact(contactObj)
+  .then(res =>{
+    $scope.main.dataUser.contacts.splice(index, 1);
+  });
+}
+
+
+$scope.deleteChat = (index, event, user) => {
+  event.stopPropagation();
+  const chatObj = {
+    chatUsername: user.id,
+    username: $scope.main.userData.username,
+    chatID: sessionStorage.getItem('idChat')
+  }
+  $flowDataDeleteChat.deleteChat(chatObj)
+  .then(res => {
+    $scope.main.dataUser.chats.splice(index, 1);
+  })
+}
   function refreshChats(id) {
     $scope.main.currID = id;
      $flowDataChats.getDataChats({'id': id})

@@ -21,11 +21,12 @@
       </form>
     </div> 
     <div class="chats-list"
-    ng-repeat="item in main.userData.chats">
+    ng-repeat="item in main.dataUser.chats">
       <div class="user-contactList-photo"><img ng-src="{{ item.avatar}}"></div>
       <div class="user-contactList-name" 
       ng-click="onClickContact(item.id, item.name, $event)"
       ng-class="{'current-contact': item.id == main.currID}">{{item.name}}</div>
+      <button class="btn-round-ok col-xs-offset-1" ng-click="deleteChat($index, $event, item)"><i class="">x</i></button>
       <div class="btn-round-maybe-xxs mes-notify" ng-if="main.newMesNotify"> ! </div>
     </div>
   </div>
@@ -43,6 +44,7 @@
       <div class="user-contactList-name" 
       ng-class="{'current-contact': item.id == main.currID}">{{item.name}}</div>
       <div class="start-chat fa fa-comments" ng-click="onClickContact(item.id, item.name, $event)"></div>
+      <button class="btn-round-ok col-xs-offset-1" ng-click="deleteContact($index, $event, item)"><i class="">x</i></button>
     </div>
   </div>
   <div class="tab" id="search">
