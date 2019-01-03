@@ -32,14 +32,29 @@ app.controller('l-chat.controller', function($scope, $transferService, $timeout,
     }
   };
   sessionStorage.setItem('idChat', idChat());
-  $timeout(() => {
+  $scope.$watch('main.userData', newVal => {
+    if (!newVal) {
+      return;
+    }
     let chatIdObj = {};
     chatIdObj.prev = sessionStorage.getItem('idChat');
     chatIdObj.curr = idChat();
     chatIdObj.destination = $scope.main.currID;
+    chatIdObj.token = sessionStorage.getItem('token');
     $transferService.setData({name: 'chatIdPrev', data: chatIdObj.curr});
     $socket.sendSocket(chatIdObj);
-  });
+    console.log('chat', chatIdObj);
+  })
+  // $timeout(() => {
+  //   let chatIdObj = {};
+  //   chatIdObj.prev = sessionStorage.getItem('idChat');
+  //   chatIdObj.curr = idChat();
+  //   chatIdObj.destination = $scope.main.currID;
+  //   chatIdObj.token = sessionStorage.getItem('token');
+  //   $transferService.setData({name: 'chatIdPrev', data: chatIdObj.curr});
+  //   $socket.sendSocket(chatIdObj);
+  //   console.log('chat', chatIdObj);
+  // });
   
   function scrollHandler () {
     $scope.main.contentChatHeight = $scope.main.chatBox.clientHeight;

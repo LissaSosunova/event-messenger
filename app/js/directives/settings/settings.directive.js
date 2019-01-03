@@ -5,7 +5,8 @@ app.directive("settings", function ($state, $socket) {
     },
     link: function ($scope) {
       $scope.logOut = function(){
-        $socket.sendMesSocket({deleteAuthorId: $scope.main.userData.username});
+        const token = sessionStorage.getItem('token');
+        $socket.sendMesSocket({deleteAuthorId: $scope.main.userData.username, token: token});
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('id');
         sessionStorage.removeItem('idChat');

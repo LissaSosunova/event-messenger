@@ -134,8 +134,8 @@ router.get('/user', function (req, res, next) {
 
   const servicePromise = datareader(User, params, 'findOne');
   servicePromise
-        .then((response) =>{
-        var user = new UserData(response);
+        .then(response =>{
+        const user = new UserData(response);
           res.json(user);
         })
 });
@@ -152,11 +152,6 @@ router.post('/finduser', async function (req, res, next) {
     } catch (err) {
       throw new Error(err);
     }
-    
-    // User.find({$or:[{username: {$regex: query}}, {email: {$regex: query}}]},  (e, d) => {
-    //   if (e) throw new Error()
-    //   else res.json(d)
-    // })
   }
   else {
     res.end();
@@ -165,7 +160,7 @@ router.post('/finduser', async function (req, res, next) {
 
 router.post('/adduser', async function (req, res, next) {
   let auth;
-  const exsistCont = false;
+  let exsistCont = false;
   const query = req.body;
   try {
     auth = jwt.decode(req.headers['authorization'], config.secretkey);
@@ -200,27 +195,6 @@ router.post('/adduser', async function (req, res, next) {
   } catch(err) {
     throw new Error(err);
   }
-  
-  // datareader(User, params, 'findOne');
-  // .then(response => {
-  //   response.contacts.forEach(item => {
-  //     if (query.id === auth.username || item.id === query.id ) {
-  //       exsistCont = true;
-  //       return
-  //       }
-  //   })
-  //   if (query.id === auth.username) exsistCont = true;
-  //   if (exsistCont) return res.json({message: "This contact is already exists"});
-  //   datareader(User, {username: query.id}, 'findOne')
-  //     .then(response => {
-  //       response.private_chat = '0';
-  //       const contact = new ContactData(response);
-  //       User.updateOne(params, {$push: {contacts: contact}}, (e, d) => {
-  //         if (e) throw new Error()
-  //         else res.json(d)
-  //       })
-  //     })
-  // });
 });
 
 router.post('/profile', function (req, res, next){

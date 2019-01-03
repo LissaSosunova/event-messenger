@@ -42,6 +42,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
-    "bootstrap-css": "^4.0.0-alpha.5"
+    "bootstrap-css": "^4.0.0-alpha.5",
+    "jslint": "^0.12.0"
   }
 }

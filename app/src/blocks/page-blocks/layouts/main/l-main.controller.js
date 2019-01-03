@@ -15,7 +15,7 @@ app.controller('main', function($scope, $state, $flowDataUser, $transferService,
       $scope.main.userData = response;
       $scope.main.eventsAll = response.events;
       $scope.main.userName = response.name;
-      $scope.main.avatar = response.avatar.link;
+      // $scope.main.avatar = response.avatar.link;
       $scope.main.notifications = response.notifications;
 
       $scope.main.eventsAll.forEach(function (item, i) {
@@ -32,7 +32,8 @@ app.controller('main', function($scope, $state, $flowDataUser, $transferService,
         $scope.main.eventsAll = response.events;
         $scope.main.userName = response.name;
         $scope.main.avatar = response.avatar;
-        $socket.sendMesSocket({authorId: $scope.main.userData.username});
+        const token = sessionStorage.getItem('token');
+        $socket.sendMesSocket({authorId: $scope.main.userData.username, token:token});
         console.log($scope.main);
         $scope.main.eventsAll.forEach((item, i) => {
           if($scope.main.eventsAll[i].status === false){
