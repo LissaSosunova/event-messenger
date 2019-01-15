@@ -64,7 +64,7 @@ app.controller('l-header.controller', function($scope, $state, $flowDataEvent, $
     };
   document.onclick = function () {
     //  $scope.main.notificationsList.toggleClass('non-vis');
-      // $scope.main.eventSideBar.classList.add('no-vis-sm-screen');
+    $scope.main.eventSideBar.classList.add('no-vis-sm-screen');
     $scope.main.eventSideBar.classList.remove('is-vis-sm-screen');
     $scope.main.contactList.classList.add('no-vis-contact-list');
     $scope.main.contactList.classList.remove('is-vis-contact-list');

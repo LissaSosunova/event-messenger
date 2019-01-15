@@ -62,47 +62,37 @@ router.post('/user', function (req, res, next){
     name: 'MongoError'
   };
   const defaultAvatar = {
-      owner: 'default'
+      owner: 'default',
+      url: "src/img/default-profile-image.png"
   };
-  let avatar;
-  datareader(Avatar, defaultAvatar, 'findOne')
-    .then((response) => {
-      if(response){
-        avatar = response;
-        return avatar;
-      }
-    })
-    .then((avatar) =>{
-    console.log(avatar);
-      const user = new User;
-      user.username = req.body.username;
-      user.email = req.body.email;
-      user.name = "No name";
-      user.phone = "Set your phone number";
-      user.avatar = avatar;
-      user.events = [];
-      user.notifications = [];
-      user.chats = [];
-      const password = req.body.password;
-      console.log(user);
-      datareader(User, params, 'findOne')
-        .then((response) =>{
-          if (response !== null){
-            res.json(dublicate);
-          } else {
-            bcrypt.hash(password, 10, function(err, hash){
-              if (err) res.json(err);
-              else {
-                user.password = hash;
-                user.save(err => {
-                  if (err) res.json(err)
-                  else res.sendStatus(201)
-                })
-              }
+  const user = new User;
+  user.username = req.body.username;
+  user.email = req.body.email;
+  user.name = "No name";
+  user.phone = "Set your phone number";
+  user.avatar = defaultAvatar;
+  user.events = [];
+  user.notifications = [];
+  user.chats = [];
+  const password = req.body.password;
+  console.log(user);
+  datareader(User, params, 'findOne')
+    .then((response) =>{
+      if (response !== null){
+        res.json(dublicate);
+      } else {
+        bcrypt.hash(password, 10, function(err, hash){
+          if (err) res.json(err);
+          else {
+            user.password = hash;
+            user.save(err => {
+              if (err) res.json(err)
+              else res.sendStatus(201)
             })
           }
         })
-    });
+      }
+    })
 });
 
 
@@ -142,6 +132,7 @@ router.get('/user', function (req, res, next) {
 
 router.post('/finduser', async function (req, res, next) {
   const query = req.body.param;
+  console.log(query);
   const queryParam = {
     $or:[{username: {$regex: query}}, {email: {$regex: query}}]
   }
@@ -152,7 +143,7 @@ router.post('/finduser', async function (req, res, next) {
     } catch (err) {
       throw new Error(err);
     }
-    
+
     // User.find({$or:[{username: {$regex: query}}, {email: {$regex: query}}]},  (e, d) => {
     //   if (e) throw new Error()
     //   else res.json(d)
@@ -165,7 +156,7 @@ router.post('/finduser', async function (req, res, next) {
 
 router.post('/adduser', async function (req, res, next) {
   let auth;
-  const exsistCont = false;
+  let exsistCont = false;
   const query = req.body;
   try {
     auth = jwt.decode(req.headers['authorization'], config.secretkey);
@@ -187,7 +178,7 @@ router.post('/adduser', async function (req, res, next) {
     });
     if (query.id === auth.username) exsistCont = true;
     if (exsistCont) return res.json({message: "This contact is already exists"});
-  
+
     const findRes = await datareader(User, {username: query.id}, 'findOne');
     findRes.private_chat = '0';
     const contact = new ContactData(findRes);
@@ -200,7 +191,7 @@ router.post('/adduser', async function (req, res, next) {
   } catch(err) {
     throw new Error(err);
   }
-  
+
   // datareader(User, params, 'findOne');
   // .then(response => {
   //   response.contacts.forEach(item => {

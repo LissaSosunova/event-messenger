@@ -2,7 +2,7 @@ app.controller('main.contactList', function($scope, $flowDataChats, $flowDataFin
 $transferService, $state, $flowDataAddUser, $flowDataUser, $postNewChat){
   let ctrl = this;
   ctrl.$onInit = _init;
-  
+
   function _init () {
     $scope.main = $scope.main || {};
     $scope.main.newMesNotify = false;
@@ -32,7 +32,7 @@ $transferService, $state, $flowDataAddUser, $flowDataUser, $postNewChat){
             .then(response => {
               $scope.main.userData = response;
             });
-     
+
   })
 }
 
@@ -61,6 +61,7 @@ $transferService, $state, $flowDataAddUser, $flowDataUser, $postNewChat){
 
   $scope.searchContact = item => {
     $flowDataFindUser.findUser(item)
+      console.log(item)
       .then(response => {
         $scope.searchRes = response;
         $scope.main.querySearch = [];
