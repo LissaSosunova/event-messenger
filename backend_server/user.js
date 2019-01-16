@@ -132,7 +132,6 @@ router.get('/user', function (req, res, next) {
 
 router.post('/finduser', async function (req, res, next) {
   const query = req.body.param;
-  console.log(query);
   const queryParam = {
     $or:[{username: {$regex: query}}, {email: {$regex: query}}]
   }
